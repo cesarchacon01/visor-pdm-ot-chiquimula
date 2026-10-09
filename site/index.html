@@ -122,6 +122,23 @@ body.ready .card,body.ready .kpi{animation:none}
 .kpi .k-val{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:10px;font-variant-numeric:tabular-nums}
 .kpi .k-val small{font-size:17px;font-weight:600;color:var(--muted)}
 .kpi .k-foot{font-size:13px;color:var(--ink2);margin-top:6px}
+.k-help{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.4}
+.howto{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.howto summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;list-style:none}
+.howto summary::-webkit-details-marker{display:none}
+.howto summary small{font-weight:500;color:var(--muted);font-size:13px}
+.howto[open] summary small{display:none}
+.hq{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800}
+.howgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:0 18px 18px}
+@media(min-width:1100px){.howgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.howgrid>div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.5}
+.howgrid h4{margin:0 0 6px;font-size:14px;color:var(--brand-ink)}
+.howgrid p{margin:0 0 6px}.howgrid ul{margin:4px 0 0;padding-left:0;list-style:none;display:grid;gap:5px}
+.howgrid .ex{background:var(--card);border-left:3px solid var(--accent);padding:6px 10px;border-radius:6px}
+.how{font-size:12.5px;color:var(--ink2);background:var(--bg);border-radius:8px;padding:8px 10px;margin-top:10px;line-height:1.45}
+.how b{color:var(--ink)}
+@media print{.howto{display:none}}
+
 .kpi .k-row{display:flex;align-items:center;gap:12px;margin-top:8px}
 .ring{width:66px;height:66px;flex:none}
 .vstack{display:flex;height:12px;border-radius:6px;overflow:hidden;margin-top:12px;gap:2px;background:var(--card)}
@@ -278,6 +295,24 @@ footer.foot{margin-top:30px;padding:18px 0 30px;color:var(--muted);font-size:12.
   <!-- KPIs -->
   <section id="sec-kpi" class="kpis" aria-label="Indicadores clave"></section>
 
+
+  <!-- Cómo leer -->
+  <details class="howto" id="howto">
+    <summary><span class="hq">?</span> Cómo leer este visor <small>(pulse para ver la explicación)</small></summary>
+    <div class="howgrid">
+      <div><h4>¿Qué se preguntó?</h4><p>Cada Dirección Municipal de Planificación (DMP) respondió un diagnóstico rápido sobre su PDM-OT: si está vigente, si lo usan para planificar e invertir, cómo dan seguimiento a sus metas y qué apoyo necesitan. Se toma <b>una respuesta por municipio</b> (la más reciente).</p></div>
+      <div><h4>El semáforo (9 criterios)</h4><p>Cada criterio se valoró así:</p>
+        <ul><li><i class="sw st-verde">✓</i> <b>Verde · Adecuado:</b> funciona o se utiliza.</li><li><i class="sw st-amarillo">!</i> <b>Amarillo · Parcial:</b> existe, pero necesita fortalecerse.</li><li><i class="sw st-rojo">✕</i> <b>Rojo · Pendiente:</b> no está desarrollado o no se usa.</li><li><i class="sw st-sin_informacion">?</i> <b>Sin información:</b> quien respondió no tenía datos para valorarlo.</li></ul></div>
+      <div><h4>El índice de uso (0 a 100)</h4><p>Resume el semáforo en un número: verde vale 2 puntos, amarillo 1 y rojo 0. Se suman los puntos y se dividen entre el máximo posible.</p>
+        <p class="ex"><b>Ejemplo:</b> 4 verdes, 4 amarillos y 1 rojo = 8 + 4 + 0 = 12 puntos de 18 posibles → <b>67</b>.</p>
+        <p>Los criterios «sin información» no cuentan ni a favor ni en contra: el índice se calcula solo con los que sí se valoraron. Por eso un municipio con muchos «sin información» debe leerse con cautela.</p></div>
+      <div><h4>Niveles y colores del mapa</h4><ul><li><b>Alto (70–100):</b> el plan se usa en la mayoría de aspectos.</li><li><b>Medio (40–69):</b> uso parcial; hay base para fortalecer.</li><li><b>Bajo (0–39):</b> el plan casi no orienta la gestión.</li><li><b>Rayado gris:</b> el municipio aún no responde.</li></ul>
+        <p>El índice <b>no califica a la DMP</b>: muestra dónde conviene acompañar.</p></div>
+      <div><h4>Otros indicadores</h4><ul><li><b>Antigüedad:</b> años desde que se aprobó el plan; con 5 años o más conviene revisar si necesita actualización.</li><li><b>Brecha de seguimiento:</b> municipios que no tienen registro de metas o que no revisan avances con una periodicidad definida.</li><li><b>Preguntas de selección múltiple</b> (temas, apoyos, oficinas): un municipio puede marcar varias opciones, por eso las barras no suman el total.</li></ul></div>
+      <div><h4>Cómo usarlo</h4><ul><li>Elija un municipio en el filtro (o púlselo en el mapa, la matriz o el ranking) para ver su <b>ficha municipal</b>.</li><li>Pase el cursor sobre barras y celdas para ver el detalle.</li><li>Los datos se actualizan solos cada 5 minutos desde Kobo.</li><li>Por privacidad no se muestran nombres ni los textos abiertos (acción, responsable y observaciones).</li></ul></div>
+    </div>
+  </details>
+
   <!-- Mapa -->
   <section class="sec" id="sec-map">
     <div class="sec-h"><h2>Mapa del departamento</h2><p>Índice de uso del PDM-OT por municipio · pulse un municipio para filtrar</p></div>
@@ -313,8 +348,8 @@ footer.foot{margin-top:30px;padding:18px 0 30px;color:var(--muted);font-size:12.
   <section class="sec" id="sec-crit">
     <div class="sec-h"><h2>Criterios y ranking</h2><p>Qué aspecto del plan está más rezagado y qué municipios lo usan más</p></div>
     <div class="grid">
-      <article class="card c-7"><header><h3 id="t-stack">Valoraciones por criterio</h3><p class="sub">Distribución 100 % de municipios con respuesta · de más débil (arriba) a más fuerte</p></header><div class="chart" id="chStack"></div></article>
-      <article class="card c-5"><header><h3 id="t-rank">Ranking del índice de uso</h3><p class="sub">Índice 0–100 · la línea marca el promedio departamental</p></header><div class="chart" id="chRank"></div><p class="note" id="rankNote"></p></article>
+      <article class="card c-7"><header><h3 id="t-stack">Valoraciones por criterio</h3><p class="sub">Distribución 100 % de municipios con respuesta · de más débil (arriba) a más fuerte</p></header><div class="chart" id="chStack"></div><p class="how"><b>Cómo leerlo:</b> cada barra es un criterio y suma 100 % de los municipios que respondieron. Mientras más rojo y amarillo, más rezagado está ese aspecto del plan. Los números dentro de la barra son cantidad de municipios.</p></article>
+      <article class="card c-5"><header><h3 id="t-rank">Ranking del índice de uso</h3><p class="sub">Índice 0–100 · la línea marca el promedio departamental</p></header><div class="chart" id="chRank"></div><p class="how"><b>Cómo leerlo:</b> cada barra es el índice de uso del municipio (0 a 100). El color indica el nivel (rojo bajo, amarillo medio, verde alto) y la línea punteada el promedio del departamento.</p><p class="note" id="rankNote"></p></article>
     </div>
   </section>
 
@@ -322,7 +357,7 @@ footer.foot{margin-top:30px;padding:18px 0 30px;color:var(--muted);font-size:12.
   <section class="sec" id="sec-plan">
     <div class="sec-h"><h2>Estado del plan</h2><p>Año de aprobación, actualización en curso y oficinas existentes</p></div>
     <div class="grid">
-      <article class="card c-5"><header><h3 id="t-year">Año de aprobación del PDM-OT</h3><p class="sub">Franja: planes con 5 años o más (posible actualización)</p></header><div class="chart" id="chYear"></div><p class="note" id="yearNote"></p></article>
+      <article class="card c-5"><header><h3 id="t-year">Año de aprobación del PDM-OT</h3><p class="sub">Franja: planes con 5 años o más (posible actualización)</p></header><div class="chart" id="chYear"></div><p class="how"><b>Cómo leerlo:</b> cada punto es el año en que se aprobó el PDM-OT del municipio. Los puntos naranja, dentro de la franja, tienen 5 años o más y podrían requerir actualización.</p><p class="note" id="yearNote"></p></article>
       <article class="card c-3"><header><h3 id="t-upd">¿Lo están actualizando?</h3><p class="sub">Municipios con respuesta</p></header><div class="chart" id="chUpd" style="height:260px"></div></article>
       <article class="card c-4"><header><h3 id="t-off">Oficinas municipales existentes</h3><p class="sub">UGAM · DMM · GIRD · OMDEL · OMSAN</p></header><div class="tscroll"><div id="offices"></div></div></article>
     </div>
@@ -502,6 +537,7 @@ function resolveKey(k){
   if(LABEL_NORM.has(n))return LABEL_NORM.get(n);
   const last=String(k).split('/').pop().trim();
   if(KNOWN.has(last))return last;
+  {const nl=norm(last);if(/^oficinas?( |$)/.test(nl)&&!/otr|especif/.test(nl))return 'oficinas_existentes';if(/oficinas o unidades/.test(n))return 'oficinas_existentes';}
   if(String(k).includes('¿')&&!String(k).includes('/')){for(const [re,key] of LABEL_HINTS)if(re.test(n))return key;}
   return null;
 }
@@ -539,13 +575,13 @@ function prepare(raw){
     item._t=recTime(item);
     out.push(item);
   });
-  return {out,omitted,missing:CRIT.map(c=>c[0]).filter(k=>!seen.has(k))};
+  return {out,omitted,seen:[...seen],missing:CRIT.map(c=>c[0]).filter(k=>!seen.has(k))};
 }
 
 /* =====================================================================
    4. Estado y cálculos
    ===================================================================== */
-const S={all:[],latest:[],dups:[],source:null,publicMode:false,updatedAt:'',omitted:0,missing:[],fileName:'',filter:'',geo:null,sort:{key:'idx',dir:'desc'},q:''};
+const S={seen:new Set(),all:[],latest:[],dups:[],source:null,publicMode:false,updatedAt:'',omitted:0,missing:[],fileName:'',filter:'',geo:null,sort:{key:'idx',dir:'desc'},q:''};
 function dedupe(rs){
   const m=new Map(),count={};
   for(const r of rs){count[r.municipio]=(count[r.municipio]||0)+1;const o=m.get(r.municipio);if(!o||r._t>o._t||(r._t===o._t&&r._row>o._row))m.set(r.municipio,r);}
@@ -624,7 +660,8 @@ const ICON={
  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1 1 2-2M3.5 12h3M3.5 18h3"/></svg>',
  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
 };
-function kpi(o){return `<div class="kpi" style="--kc:var(${o.c||'--brand'});--kbg:${o.bg||'var(--brand-soft)'}"><div class="k-top"><span class="k-ico">${o.icon}</span>${esc(o.t)}</div>${o.body}</div>`;}
+const KHELP={'Cobertura':'Municipios que ya enviaron el diagnóstico, de los 11 del departamento.','Estado de respuesta':'Indica si el municipio ya envió el diagnóstico.','Índice de uso':'0 = todo en rojo · 100 = todo en verde. Verde vale 2, amarillo 1 y rojo 0; «sin información» no cuenta.','Valoraciones':'Total de criterios valorados (municipios × 9 criterios) y cómo se reparten por color.','Actualizando el plan':'Respondieron «Sí» a: ¿actualmente están actualizando el PDM-OT?','Sin registro de metas':'Respondieron que no existe un registro de las metas del plan y sus avances.','Registro de metas':'Dónde registran las metas del plan y cada cuánto revisan los avances.','Antigüedad del plan':'Años desde la aprobación del plan. Con 5 años o más conviene revisar su actualización.'};
+function kpi(o){return `<div class="kpi" style="--kc:var(${o.c||'--brand'});--kbg:${o.bg||'var(--brand-soft)'}"><div class="k-top"><span class="k-ico">${o.icon}</span>${esc(o.t)}</div>${o.body}${KHELP[o.t]?`<div class="k-help">${KHELP[o.t]}</div>`:''}</div>`;}
 function ring(n,tot){const r=27,C=2*Math.PI*r,p=tot?n/tot:0;return `<svg class="ring" viewBox="0 0 66 66" role="img" aria-label="${n} de ${tot}"><circle cx="33" cy="33" r="${r}" fill="none" stroke="var(--track)" stroke-width="8"/><circle cx="33" cy="33" r="${r}" fill="none" stroke="var(--brand)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(C*p).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 33 33)"/><text x="33" y="38" text-anchor="middle" font-size="15" font-weight="800" fill="var(--ink)">${pct(n,tot)}%</text></svg>`;}
 
 function render(){
@@ -797,6 +834,7 @@ function renderPlan(all,sel){
   const least=keys.slice().sort((a,b)=>cnt(a)-cnt(b))[0];
   $('t-off').textContent=answered.length?`${SHORT.oficinas[least]} es la oficina menos presente (${cnt(least)} de ${answered.length})`:'Oficinas municipales existentes';
   const rowsO=MUNIS.filter(k=>resp.has(k)).map(k=>all.find(r=>r.municipio===k));
+  if(rowsO.length&&!S.seen.has('oficinas_existentes')){$('t-off').textContent='Oficinas municipales existentes';$('offices').innerHTML='<p class="empty">La base publicada desde Kobo no trae la pregunta de oficinas existentes. Revise que la GitHub Action incluya el campo <b>oficinas_existentes</b> en data.json.</p>';return;}
   $('offices').innerHTML=rowsO.length?`<table class="offices"><thead><tr><th>Municipio</th>${keys.map(k=>`<th class="ck">${esc(SHORT.oficinas[k].split(' /')[0])}<div style="font-weight:600">${cnt(k)}/${answered.length}</div></th>`).join('')}</tr></thead><tbody>${rowsO.map(r=>{const v=r.oficinas_existentes||[];const dim=S.filter&&S.filter!==r.municipio?' style="opacity:.4"':'';
     return `<tr${dim}><td><button class="mname" data-muni="${r.municipio}">${esc(mname(r.municipio))}</button></td>${keys.map(k=>`<td class="ck">${v.includes('no_sabe')?'<span class="no">¿?</span>':v.includes(k)?'<span class="yes" aria-label="Existe">✓</span>':'<span class="no" aria-label="No existe">—</span>'}</td>`).join('')}</tr>`;}).join('')}</tbody></table>`:'<p class="empty">Sin respuestas cargadas.</p>';
 }
@@ -899,7 +937,7 @@ function renderFicha(rec,scores,dIdx){
    <div class="semcards">${CRIT.map(c=>{const v=rec[c[0]],st=ST[v];return `<div class="semcard ${st?'st-'+v:'st-nr'}"><div class="sc-h"><span>${esc(c[1])}</span><span>${st?st.i+' '+st.l:'—'}</span></div><div class="sc-q">${esc(c[2])}</div></div>`;}).join('')}</div>
    <dl class="facts">
     <div class="fact"><dt>Plan vigente</dt><dd>${rec.anio_aprobacion?`Aprobado en <b>${rec.anio_aprobacion}</b> (${age(rec)} ${pl(age(rec),'año','años')})`:'Año de aprobación no conocido'} · ¿Actualizando? <b>${esc(lblFull('si_no_ns',rec.en_actualizacion)||'—')}</b></dd></div>
-    <div class="fact"><dt>Oficinas existentes</dt><dd>${chips((rec.oficinas_existentes||[]),'oficinas')}</dd></div>
+    <div class="fact"><dt>Oficinas existentes</dt><dd>${S.seen.has('oficinas_existentes')?chips((rec.oficinas_existentes||[]),'oficinas'):'<span class="reserved">No viene en la base publicada</span>'}</dd></div>
     <div class="fact"><dt>Registro y revisión de metas</dt><dd>${chips(rec.medios_metas,'medios_registro')}<div class="note">Revisión: ${esc(lblFull('frecuencia',rec.frecuencia_revision)||'—')}${rec.ejemplo_registro?` · Ejemplo: ${esc(rec.ejemplo_registro)}`:''}</div></dd></div>
     <div class="fact"><dt>Necesidad principal</dt><dd><b>${esc(lblFull('necesidad_principal',rec.necesidad)||'—')}</b></dd></div>
     <div class="fact"><dt>Temas prioritarios</dt><dd>${chips(rec.temas_prioritarios,'temas')}${rec.otro_tema?`<div class="note">Otro: ${esc(rec.otro_tema)}</div>`:''}</dd></div>
@@ -954,6 +992,8 @@ function renderQuality(){
   const sinInfo=S.latest.map(r=>({m:r.municipio,...scoreOf(r)})).filter(x=>x.sin||x.c.blank);
   const totalSin=sinInfo.reduce((a,x)=>a+x.sin,0);
   L.push(sinInfo.length?`<li><b>Criterios sin valoración:</b> ${totalSin} «sin información»${sinInfo.some(x=>x.c.blank)?' y algunos vacíos o no reconocidos':''} — ${sinInfo.map(x=>`${esc(mname(x.m))}: ${x.sin+x.c.blank}`).join(', ')}. Se excluyen del índice.</li>`:'<li><b>Criterios sin valoración:</b> ninguno.</li>');
+  {const imp={anio_aprobacion:'Año de aprobación',en_actualizacion:'¿Están actualizando?',oficinas_existentes:'Oficinas existentes',medios_metas:'Medios de registro',contenido_metas:'Contenido del registro',frecuencia_revision:'Frecuencia de revisión',necesidad:'Necesidad principal',temas_prioritarios:'Temas prioritarios',apoyos_requeridos:'Apoyos requeridos',modalidad:'Modalidad',plazo_inicio:'Plazo'};
+   const miss=Object.keys(imp).filter(k=>!S.seen.has(k));if(S.all.length&&miss.length)L.push(`<li><b>Preguntas que no vienen en la base:</b> ${miss.map(k=>imp[k]).join(', ')}. Sus gráficos aparecen vacíos; revise que la exportación o la GitHub Action incluya esos campos.</li>`);}
   if(S.missing.length&&S.all.length)L.push(`<li><b>Columnas del semáforo no encontradas:</b> ${S.missing.map(k=>CRIT_SHORT[k]).join(', ')}.</li>`);
   const invalid=[];for(const r of S.latest)for(const [f,list] of Object.entries(FIELD_LIST)){const vals=Array.isArray(r[f])?r[f]:(r[f]?[r[f]]:[]);for(const v of vals)if(!SCHEMA[list][v])invalid.push(`${mname(r.municipio)} · ${f}: «${v}»`);}
   if(invalid.length)L.push(`<li><b>Valores no reconocidos:</b> ${esc(invalid.slice(0,8).join('; '))}${invalid.length>8?'…':''}</li>`);
@@ -991,7 +1031,7 @@ function showError(msg){const e=$('error');e.textContent=msg||'';e.classList.tog
    ===================================================================== */
 function applyPublic(rs){for(const r of rs){delete r.informante;for(const k of RESERVED)r[k]=null;}return rs;}
 function setData(clean,o){
-  S.all=clean.out;S.latest=dedupe(S.all);S.omitted=o.omitted!=null?o.omitted:clean.omitted;S.missing=clean.missing;
+  S.all=clean.out;S.latest=dedupe(S.all);S.omitted=o.omitted!=null?o.omitted:clean.omitted;S.missing=clean.missing;S.seen=new Set(clean.seen||[]);
   S.source=o.source;S.publicMode=!!o.publicMode;S.updatedAt=o.updatedAt||'';S.fileName=o.fileName||'';
   if(S.filter&&!SCHEMA.municipios[S.filter])S.filter='';
   showError('');render();
