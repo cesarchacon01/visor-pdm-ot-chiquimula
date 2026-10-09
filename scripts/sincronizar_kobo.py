@@ -6,7 +6,8 @@ from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.parse import urlparse, urljoin
 
 FIELDS = {
- 'municipio':'municipios', 'en_actualizacion':'si_no_ns',
+ 'municipio':'municipios', 'conoce_anio':'si_no_ns', 'en_actualizacion':'si_no_ns',
+ 'oficinas_existentes':'oficinas',
  'datos_actuales':'semaforo','prioridades':'semaforo','gestion_riesgo':'semaforo',
  'metas_medibles':'semaforo','registro_metas':'semaforo','uso_planificacion':'semaforo',
  'uso_inversion':'semaforo','uso_territorio':'semaforo','seguimiento':'semaforo',
@@ -15,8 +16,11 @@ FIELDS = {
  'temas_prioritarios':'temas','apoyos_requeridos':'apoyos',
  'modalidad':'modalidades','plazo_inicio':'plazos'
 }
-MULTI={'medios_metas','contenido_metas','temas_prioritarios','apoyos_requeridos'}
+MULTI={'medios_metas','contenido_metas','temas_prioritarios','apoyos_requeridos','oficinas_existentes'}
 SCHEMA=json.loads(Path(__file__).with_name('opciones.json').read_text(encoding='utf-8'))
+# Respaldo por si opciones.json no trae alguna de estas listas
+SCHEMA.setdefault('oficinas',{'ugam':'UGAM','dmm':'DMM','gird':'GIRD / DIMGIR','omdel':'OMDEL / UMDEL','omsan':'OMSAN / DIMSAN','ninguna':'Ninguna','no_sabe':'No sabe'})
+SCHEMA.setdefault('si_no_ns',{'si':'Sí','no':'No','no_sabe':'No sabe'})
 
 def clean(row):
     flat={k.split('/')[-1]:v for k,v in row.items()}
@@ -28,6 +32,9 @@ def clean(row):
             vals=value if isinstance(value,list) else str(value).split()
             result[key]=list(dict.fromkeys(v for v in vals if isinstance(v,str) and v in SCHEMA[choices]))
         else: result[key]=value if isinstance(value,str) and value in SCHEMA[choices] else ''
+    # Cargo: texto corto permitido en el visor público (nunca el nombre de quien responde)
+    cargo=flat.get('cargo')
+    if isinstance(cargo,str) and cargo.strip(): result['cargo']=' '.join(cargo.split())[:60]
     year=str(flat.get('anio_aprobacion',''))
     if year.isdigit() and 2000<=int(year)<=datetime.now(timezone.utc).year: result['anio_aprobacion']=int(year)
     for key in ['fecha','_submission_time','fin']:
