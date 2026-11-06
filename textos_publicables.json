@@ -1,0 +1,147 @@
+{
+ "version": 2,
+ "revisado": "2026-11-05",
+ "criterio": "Sin datos personales. Corrección ortográfica mínima que conserva el significado. En la oficina que coordinaría se publica solo la instancia, no cargos ni nombres.",
+ "instrucciones": "Un texto libre solo se publica si la huella (SHA-256) del texto que llega de Kobo, sin espacios repetidos, coincide con 'huella'. Así el texto original nunca se guarda en este repositorio público. Si no coincide, el visor lo muestra como 'en revisión' y el registro de la Action indica municipio, campo y huella. Para aprobarlo: leer el texto en Kobo, copiar la huella del registro de la Action en 'huella', escribir la versión revisada (sin datos personales) en 'publicado' y actualizar 'revisado'.",
+ "textos": {
+  "camotan": {
+   "accion": {
+    "huella": "c69e2d4d56ac2e8df16d90a6409c24bec92003e20ced6ac12b0caa89d36711d2",
+    "publicado": "La parte de seguimiento a la implementación del PDM-OT"
+   },
+   "coordina": {
+    "huella": "60fb1e1f752e900f965e578e0218ec342623e081328a2b9199a066a85068e98f",
+    "publicado": "DMP y DIMGIRD"
+   }
+  },
+  "chiquimula": {
+   "accion": {
+    "huella": "f27f7216ed52d9d8251e821ae5b21dd6e426a049ebac9eed3e211b5d9cec12d8",
+    "publicado": "Actualizar los indicadores: diagnóstico sustentado en información verificable."
+   },
+   "coordina": {
+    "huella": "afdfdfba1b2750bcec2beddfd75451ed3e62eacec1ef5421ccfd98d7c5b2f1cb",
+    "publicado": "DMP"
+   },
+   "ejemplo": {
+    "huella": "15b5f73e804d67e1d12d8ffc5a504fff0c211e5ee692e9df4a5a6d265523a207",
+    "publicado": "Informe cuatrimestral de ejecución física y financiera"
+   }
+  },
+  "concepcion_las_minas": {
+   "accion": {
+    "huella": "30a8480e255f91723d15dbe62bd99aad79978469143cf08fda30ed6993b9a9f8",
+    "publicado": "Ordenamiento territorial"
+   },
+   "coordina": {
+    "huella": "991fdba4a505209adb629b453d5c73e6f0a9624c3a1abc6159f930092e4f4688",
+    "publicado": "Oficina de Catastro"
+   }
+  },
+  "esquipulas": {
+   "accion": {
+    "huella": "45f4c6efde65862074cc17df53df5171117a3daed09eb8a24d75114864b3cafa",
+    "publicado": "Revisión y análisis"
+   },
+   "coordina": {
+    "huella": "26bb3a59c6688436444712dd25740071e5d5ce80bfe32c448600c4ee9353054c",
+    "publicado": "Ordenamiento Territorial"
+   },
+   "ejemplo": {
+    "huella": "e6c308a66dd78ad1a949469bfbf945c803c8c8961aa51bca11a5ea60ddee1943",
+    "publicado": "Informe"
+   }
+  },
+  "ipala": {
+   "accion": {
+    "huella": "20317191b53cd442f0123a6e83359c5fb0759e23d3134b65693e51df263c55f0",
+    "publicado": "Por definir"
+   },
+   "coordina": {
+    "huella": "afdfdfba1b2750bcec2beddfd75451ed3e62eacec1ef5421ccfd98d7c5b2f1cb",
+    "publicado": "DMP"
+   }
+  },
+  "jocotan": {
+   "accion": {
+    "huella": "20317191b53cd442f0123a6e83359c5fb0759e23d3134b65693e51df263c55f0",
+    "publicado": "Por definir"
+   },
+   "coordina": {
+    "huella": "20317191b53cd442f0123a6e83359c5fb0759e23d3134b65693e51df263c55f0",
+    "publicado": "Por definir"
+   },
+   "ejemplo": {
+    "huella": "8488d97ec3f60d743e92db85802570829759ed3a2bdb325a1fcae9608575d9d9",
+    "publicado": "Informe cuatrimestral"
+   }
+  },
+  "olopa": {
+   "accion": {
+    "huella": "20317191b53cd442f0123a6e83359c5fb0759e23d3134b65693e51df263c55f0",
+    "publicado": "Por definir"
+   },
+   "coordina": {
+    "huella": "bd435b51e508349de938866378e857d34c62987443ea1c5db5603f4daa3f574c",
+    "publicado": "DMP"
+   }
+  },
+  "quezaltepeque": {
+   "accion": {
+    "huella": "b108ce3bd1f779838ca8ccc91ae9ff122d258f931187363e27aa894eb4f04481",
+    "publicado": "Presentarlo al alcalde y concejo"
+   },
+   "coordina": {
+    "huella": "7d3ac0ef0ba7c86c14247d5f0827fbe3a6242bcb59fee27b8104dfc4e0433470",
+    "publicado": "DMP"
+   }
+  },
+  "san_jacinto": {
+   "accion": {
+    "huella": "4ea0af2c70aa8906dd10200c8b617ade2c5ae834016b98324b0c28d0818da59d",
+    "publicado": "Actualización del plan"
+   },
+   "coordina": {
+    "huella": "d8bfd2df3d670911e16bfc647537683de34c8c140753dc45ec640ef6c8e9617a",
+    "publicado": "Ordenamiento Territorial"
+   }
+  },
+  "san_jose_la_arada": {
+   "accion": {
+    "huella": "187dd04689938d649dcbbc5c6728fb9a5cebc213c0866a5787c4ed45e24b0675",
+    "publicado": "Realizar una revisión profunda del PDM-OT con el concejo municipal, oficinas relativamente nuevas como UMGIRD y DMSAN, y entidades presentes en el municipio."
+   },
+   "coordina": {
+    "huella": "3ef8e9e162cd1545d248cc9595bd148e030f64c9af7969c916a2959110b9e454",
+    "publicado": "DMP junto a Secretaría Municipal"
+   }
+  },
+  "san_juan_ermita": {
+   "accion": {
+    "huella": "e6fd29ab57aab87c5ab3b1e3af26aed0066296798d389edde76df7525aba7f9d",
+    "publicado": "Actualización de indicadores"
+   },
+   "coordina": {
+    "huella": "4dcfff60bfe13921beb66ed98e5eaed795d07bd5bcdf1ecf65ee9adf8b1a4f0a",
+    "publicado": "Oficina de Ordenamiento Territorial"
+   },
+   "ejemplo": {
+    "huella": "eaae835c38f40e173131a60b44b7fa0c62c072306a92b387120435765587a146",
+    "publicado": "PEI-POM-POA"
+   }
+  }
+ },
+ "notas_control": [
+  {
+   "municipio": "chiquimula",
+   "texto": "Este municipio tuvo un registro anterior en la boleta (8 de octubre de 2026). El visor muestra la respuesta recibida el 5 de noviembre de 2026. Se recomienda confirmar con la DMP cuál debe considerarse vigente.",
+   "detalle": [
+    "Registro anterior: recibido en Kobo el 8 de octubre de 2026 (identificador 1db8ebbc). Ya no figura en la exportación de Kobo del 5 de noviembre de 2026, 19:28, hora de Guatemala.",
+    "Registro publicado: recibido en Kobo el 5 de noviembre de 2026, 10:40, hora de Guatemala (identificador bbff9e5f). Fecha anotada en la boleta: 4 de noviembre de 2026.",
+    "Los identificadores son distintos: el registro publicado es un envío nuevo, no una edición del anterior.",
+    "No se ha confirmado que la respuesta nueva sustituya a la anterior. Estado: pendiente de confirmación con la DMP."
+   ],
+   "estado": "pendiente"
+  }
+ ]
+}
