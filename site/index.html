@@ -3,1102 +3,731 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PDM-OT · Chiquimula</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F4C5C'/%3E%3Ccircle cx='16' cy='9' r='4' fill='%23D64545'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23F2B632'/%3E%3Ccircle cx='16' cy='23' r='4' fill='%232E9E5B'/%3E%3C/svg%3E">
-<meta name="description" content="Diagnóstico rápido del PDM-OT: uso, actualización y acompañamiento. Red de DMP de Chiquimula · SEGEPLAN / CRS.">
+<title>Diagnóstico del PDM-OT · Chiquimula</title>
+<meta name="description" content="Resultados del Diagnóstico rápido del PDM-OT en los 11 municipios de Chiquimula. Red de DMP · SEGEPLAN / CRS. Prototipo para revisión.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 <style>
-/* ================= Tokens ================= */
 :root{
-  --bg:#F5F7FA;--card:#FFFFFF;--ink:#14232E;--ink2:#344856;--muted:#647687;--line:#E1E7ED;--track:#EDF1F5;
-  --brand:#0F4C5C;--brand-ink:#0F4C5C;--brand-soft:#E2EEF1;--brand2:#6FA3B1;--accent:#E36414;--accent-soft:#FCE9DC;
-  --head:#0F4C5C;--head-ink:#FFFFFF;--head-muted:#B9D3DA;
-  --v:#2E9E5B;--a:#F2B632;--r:#D64545;--s:#A7AFB8;--v-ink:#fff;--a-ink:#3A2A00;--r-ink:#fff;--s-ink:#20303B;
-  --nr:#EEF1F4;--nr-line:#CDD5DC;
-  --shadow:0 1px 2px rgba(16,40,56,.05),0 6px 18px rgba(16,40,56,.07);
-  --radius:12px;
-  --c1:#0F4C5C;--c2:#E36414;--c3:#3F8FB8;--c4:#8B67B5;--c5:#7C9A33;
+  --bg:#F2F5F9;--surface:#FFFFFF;--ink:#13233A;--ink2:#3A4A60;--muted:#66768A;--line:#DCE3EC;--line2:#EDF1F6;
+  /* Azul institucional */
+  --blue:#1E5AA8;--blue-d:#123F78;--blue-s:#E6EFFA;
+  /* Colores por tema */
+  --t-cont:#4C6A92;--t-cont-s:#E9EEF5;
+  --t-plan:#1E5AA8;--t-plan-s:#E6EFFA;
+  --t-risk:#0B8F9B;--t-risk-s:#E0F4F5;
+  --t-seg:#6B4FBB;--t-seg-s:#EEEAF9;
+  /* Semáforo de la boleta */
+  --v:#2E9B5F;--v-s:#E3F4EA;--a:#EFA22B;--a-s:#FDF1DC;--r:#D2554F;--r-s:#FBE6E5;--s:#9AA6B3;--s-s:#EEF1F4;
+  --radius:14px;--shadow:0 1px 2px rgba(19,35,58,.05),0 4px 14px rgba(19,35,58,.06);
   color-scheme:light;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0C141B;--card:#15202A;--ink:#E8EEF3;--ink2:#C3CFD9;--muted:#8E9FAE;--line:#26343F;--track:#21303B;
-    --brand:#4EA2B7;--brand-ink:#86C8D8;--brand-soft:#173540;--brand2:#2F6F80;--accent:#F27D35;--accent-soft:#3A2416;
-    --head:#0A3540;--head-ink:#FFFFFF;--head-muted:#9FC4CD;
-    --nr:#1B2833;--nr-line:#34454F;
-    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.25);
-    --c1:#4EA2B7;--c2:#F27D35;--c3:#7DB8DD;--c4:#B395DA;--c5:#A3C25B;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0C141B;--card:#15202A;--ink:#E8EEF3;--ink2:#C3CFD9;--muted:#8E9FAE;--line:#26343F;--track:#21303B;
-  --brand:#4EA2B7;--brand-ink:#86C8D8;--brand-soft:#173540;--brand2:#2F6F80;--accent:#F27D35;--accent-soft:#3A2416;
-  --head:#0A3540;--head-ink:#FFFFFF;--head-muted:#9FC4CD;
-  --nr:#1B2833;--nr-line:#34454F;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.25);
-  --c1:#4EA2B7;--c2:#F27D35;--c3:#7DB8DD;--c4:#B395DA;--c5:#A3C25B;
-  color-scheme:dark;
-}
-
-/* ================= Base ================= */
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
-button,select,input{font:inherit;color:inherit}
-h1,h2,h3,p{margin:0}
-.wrap{max-width:1480px;margin:0 auto;padding:0 16px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,"Segoe UI",Roboto,system-ui,-apple-system,sans-serif;overflow-x:hidden}
+button,select{font:inherit;color:inherit}
+h1,h2,h3,h4,p{margin:0}
+a{color:var(--blue)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 16px}
 @media(min-width:900px){.wrap{padding:0 28px}}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+svg.i{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:3px solid #F2B84B;outline-offset:2px}
 
-/* ================= Header ================= */
-.top{background:var(--head);color:var(--head-ink);position:relative;z-index:20;box-shadow:0 2px 12px rgba(0,0,0,.18)}
-@media(min-width:900px){.top{position:sticky;top:0}}
-.top-in{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;padding-top:12px;padding-bottom:12px}
-.title h1{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
-.title h1 span{color:#FFB37E}
-.title p{font-size:13px;color:var(--head-muted);margin-top:2px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--head-muted)}
-.tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 10px;font-weight:600;font-size:12.5px}
-.tag i{width:8px;height:8px;border-radius:50%;background:#7CE0A3;display:inline-block}
-.tag.demo i{background:#FFB37E}.tag.local i{background:#9CC9FF}.tag.none i{background:#C8D0D6}
-.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-left:auto}
-.btn{appearance:none;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;border-radius:9px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap;line-height:1.2}
-.btn:hover{background:rgba(255,255,255,.18)}
-.btn:focus-visible,select:focus-visible,.tile:focus-visible,th button:focus-visible,input:focus-visible{outline:3px solid #FFB37E;outline-offset:2px}
-.btn.primary{background:var(--accent);border-color:var(--accent)}
-.btn.primary:hover{filter:brightness(1.08)}
-.btn[disabled]{opacity:.6;cursor:wait}
-.btn svg{width:15px;height:15px;flex:none}
-.selwrap{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--head-muted)}
-.selwrap select{background:#fff;color:#14232E;border:0;border-radius:9px;padding:7px 30px 7px 10px;font-weight:600;font-size:14px;min-width:200px;cursor:pointer}
-@media(max-width:899px){
-  .controls{margin-left:0;width:100%}
-  .selwrap{width:100%}.selwrap select{flex:1;min-width:0}
-  .controls .btn{flex:1 1 auto;justify-content:center}
-}
+/* ---------- Cabecera ---------- */
+.top{background:var(--blue-d);color:#fff}
+.top-in{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;padding-top:16px;padding-bottom:16px}
+.brand{display:flex;gap:14px;align-items:center}
+.logo{width:42px;height:42px;border-radius:12px;background:var(--blue);display:grid;place-items:center;flex:none}
+.logo svg{width:24px;height:24px;stroke:#fff}
+.brand h1{font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.brand p{font-size:13px;color:#B9CDE8}
+.proto{font-size:12px;font-weight:600;color:#DCE7F5;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:4px 12px}
 
-/* ================= Banner ================= */
-.banner{margin-top:16px;border-radius:10px;padding:10px 14px;font-size:14px;display:none;border:1px solid var(--line);background:var(--card)}
-.banner.show{display:block}
-.banner.demo{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
-.banner.err{border-color:var(--r);color:var(--ink);background:var(--card)}
-.banner b{font-weight:700}
+/* ---------- Navegación: cuatro preguntas ---------- */
+nav.qs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;box-shadow:0 2px 8px rgba(19,35,58,.04)}
+.qs-in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding-top:8px;padding-bottom:8px}
+.qbtn{appearance:none;border:1px solid transparent;background:none;border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;text-align:left;cursor:pointer;color:var(--ink2);transition:background .15s}
+.qbtn:hover{background:var(--line2)}
+.qbtn .qi{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--line2);color:var(--ink2);flex:none;transition:all .15s}
+.qbtn b{display:block;font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.25}
+.qbtn small{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+.qbtn[aria-current="page"]{background:var(--blue-s);border-color:#C8DAF2}
+.qbtn[aria-current="page"] .qi{background:var(--blue);color:#fff}
+@media(max-width:860px){.qbtn small{display:none}.qbtn{padding:8px;gap:8px}.qbtn b{font-size:13px}.qbtn .qi{width:30px;height:30px}}
+@media(max-width:520px){.qs-in{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-/* ================= Sections ================= */
-main{padding-bottom:40px}
-.sec{margin-top:28px}
-.sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.sec-h h2{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--brand-ink);font-weight:800}
-.sec-h p{font-size:13.5px;color:var(--muted)}
+/* ---------- Estructura ---------- */
+main{padding:24px 0 56px}
+.hero{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+.hero h2{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.hero p{font-size:15.5px;color:var(--ink2);margin-top:6px;max-width:760px}
 .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
-.c-12{grid-column:span 12}.c-7{grid-column:span 7}.c-6{grid-column:span 6}.c-5{grid-column:span 5}.c-4{grid-column:span 4}.c-3{grid-column:span 3}.c-8{grid-column:span 8}
-@media(max-width:1180px){.c-3,.c-4{grid-column:span 6}.c-5,.c-7,.c-8{grid-column:span 12}}
-@media(max-width:760px){.grid>*{grid-column:span 12!important}}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 14px;min-width:0;border:1px solid var(--line);animation:rise .5s ease both}
-@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){.card,.kpi{animation:none}}
-body.ready .card,body.ready .kpi{animation:none}
-.card>header{margin-bottom:10px}
-.card h3{font-size:17px;font-weight:700;line-height:1.3;letter-spacing:-.005em}
-.card .sub{font-size:13px;color:var(--muted);margin-top:3px}
-.chart{width:100%;height:300px}
-.empty{color:var(--muted);font-size:14px;padding:24px 4px;text-align:center}
-.note{font-size:12.5px;color:var(--muted);margin-top:8px}
+.c12{grid-column:span 12}.c8{grid-column:span 8}.c7{grid-column:span 7}.c6{grid-column:span 6}.c5{grid-column:span 5}.c4{grid-column:span 4}
+@media(max-width:1000px){.c4,.c5,.c7,.c8{grid-column:span 12}.c6{grid-column:span 12}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;min-width:0}
+.card h3{font-size:17px;font-weight:700;line-height:1.3}
+.card .sub{font-size:13.5px;color:var(--muted);margin-top:3px}
+.card>header{margin-bottom:14px}
+.sec{margin-top:30px}
+.sec-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sec-h .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:none;color:#fff}
+.sec-h h3{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.sec-h p{font-size:13.5px;color:var(--muted)}
+.note{font-size:12.5px;color:var(--muted)}
+.lead{font-size:16px;line-height:1.55;color:var(--ink)}
+.fade{animation:fade .35s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.fade{animation:none}html{scroll-behavior:auto}}
 
-/* ================= KPIs ================= */
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-top:20px}
-@media(max-width:1280px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:700px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:430px){.kpis{grid-template-columns:1fr}}
-.kpi{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 16px 14px;overflow:hidden;animation:rise .5s ease both;min-width:0}
-.kpi::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--kc,var(--brand))}
-.kpi .k-top{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
-.kpi .k-ico{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--kbg,var(--brand-soft));color:var(--kc,var(--brand-ink));flex:none}
-.kpi .k-ico svg{width:17px;height:17px}
-.kpi .k-val{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-top:10px;font-variant-numeric:tabular-nums}
-.kpi .k-val small{font-size:17px;font-weight:600;color:var(--muted)}
-.kpi .k-foot{font-size:13px;color:var(--ink2);margin-top:6px}
-.k-help{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);line-height:1.4}
-.howto{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.howto summary{cursor:pointer;padding:14px 18px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;list-style:none}
-.howto summary::-webkit-details-marker{display:none}
-.howto summary small{font-weight:500;color:var(--muted);font-size:13px}
-.howto[open] summary small{display:none}
-.hq{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800}
-.howgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;padding:0 18px 18px}
-@media(min-width:1100px){.howgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.howgrid>div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.5}
-.howgrid h4{margin:0 0 6px;font-size:14px;color:var(--brand-ink)}
-.howgrid p{margin:0 0 6px}.howgrid ul{margin:4px 0 0;padding-left:0;list-style:none;display:grid;gap:5px}
-.howgrid .ex{background:var(--card);border-left:3px solid var(--accent);padding:6px 10px;border-radius:6px}
-.how{font-size:12.5px;color:var(--ink2);background:var(--bg);border-radius:8px;padding:8px 10px;margin-top:10px;line-height:1.45}
-.how b{color:var(--ink)}
-@media print{.howto{display:none}}
+/* ---------- Semáforo ---------- */
+.bar{display:flex;height:30px;border-radius:8px;overflow:hidden;gap:2px;background:var(--surface)}
+.bar span{display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;min-width:0}
+.bar span.ka{color:#3A2A00}.bar span.ks{color:#2B3644}
+.bar.sm{height:12px;border-radius:6px}.bar.sm span{font-size:0}
+.bv{background:var(--v)}.ba{background:var(--a)}.br{background:var(--r)}.bs{background:var(--s)}
+.keys{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--ink2);margin-top:10px}
+.keys span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:4px;display:inline-block;flex:none}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.pill svg{width:13px;height:13px;stroke-width:2.6}
+.p-verde{background:var(--v-s);color:#1D6B40}.p-amarillo{background:var(--a-s);color:#8A5600}.p-rojo{background:var(--r-s);color:#9B2F2A}.p-sin_informacion{background:var(--s-s);color:#4A5666}
 
-.kpi .k-row{display:flex;align-items:center;gap:12px;margin-top:8px}
-.ring{width:66px;height:66px;flex:none}
-.vstack{display:flex;height:12px;border-radius:6px;overflow:hidden;margin-top:12px;gap:2px;background:var(--card)}
-.vstack span{display:block;height:100%}
-.vleg{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12.5px;margin-top:8px;color:var(--ink2)}
-.vleg b{font-variant-numeric:tabular-nums}
+/* ---------- Chips de municipio ---------- */
+.mchips{display:flex;flex-wrap:wrap;gap:6px}
+.mc{appearance:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 11px 4px 8px;font-size:13px;font-weight:600;color:var(--ink2);cursor:pointer;transition:border-color .15s,transform .15s}
+.mc:hover{border-color:var(--blue);transform:translateY(-1px)}
+.mc .dot{width:10px;height:10px;border-radius:50%}
+.byst{display:grid;gap:8px;margin-top:14px}
+.byst>div{display:grid;grid-template-columns:128px 1fr;gap:10px;align-items:start}
+.byst .lab{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;padding-top:4px}
+@media(max-width:560px){.byst>div{grid-template-columns:1fr;gap:4px}}
 
-/* ================= Status pieces ================= */
-.dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle}
-.st-verde{background:var(--v);color:var(--v-ink)}.st-amarillo{background:var(--a);color:var(--a-ink)}.st-rojo{background:var(--r);color:var(--r-ink)}.st-sin_informacion{background:var(--s);color:var(--s-ink)}
-.st-nr{background:repeating-linear-gradient(45deg,var(--nr),var(--nr) 5px,var(--card) 5px,var(--card) 10px);color:var(--muted);border:1px dashed var(--nr-line)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink2);align-items:center}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.sw{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:5px;font-size:11px;font-weight:800}
-
-/* ================= Map ================= */
-.mapwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:22px;align-items:start}
-@media(max-width:900px){.mapwrap{grid-template-columns:1fr}}
-.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.tile{appearance:none;border:2px solid transparent;border-radius:12px;min-height:92px;padding:9px 10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;transition:transform .15s,box-shadow .15s;font-size:13px;line-height:1.2}
-.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.tile .t-n{font-weight:700;font-size:13px;overflow-wrap:anywhere;hyphens:auto}
-.tile .t-v{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums}
-.tile .t-b{font-size:11.5px;font-weight:600;opacity:.92}
-.tile.sel{border-color:var(--ink);box-shadow:0 0 0 3px var(--accent)}
-.tile.dim{opacity:.45}
+/* ---------- A: resumen ---------- */
+.stat{display:flex;flex-direction:column;gap:4px}
+.stat .n{font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.stat .n small{font-size:16px;color:var(--muted);font-weight:600}
+.stat .t{font-size:14px;color:var(--ink2)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stats .card{padding:18px}
+.stats .card .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;margin-bottom:10px}
+.lists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media(max-width:800px){.lists{grid-template-columns:1fr}}
+.rank-free{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rank-free li{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.rank-free .nm{font-size:14px;font-weight:600}
+.rank-free .nm button{appearance:none;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.rank-free .nm button:hover{color:var(--blue);text-decoration:underline}
+.rank-free .bar{grid-column:1/-1}
+.rank-free .ct{font-size:12.5px;color:var(--muted);white-space:nowrap}
+@media(max-width:600px){.rank-free li{grid-template-columns:1fr}.rank-free .ct{white-space:normal}}
+.spot{border:2px solid var(--t-risk);background:linear-gradient(var(--t-risk-s),var(--t-risk-s)) top/100% 6px no-repeat,var(--surface)}
+.spot .tagr{display:inline-flex;align-items:center;gap:6px;background:var(--t-risk);color:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;margin-bottom:8px}
+.spot .tagr svg{width:14px;height:14px}
+.spotgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+@media(max-width:860px){.spotgrid{grid-template-columns:1fr}}
+.rel{display:grid;gap:10px}
+.rel .ri{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.rel .ri b{display:block;font-size:13.5px}
+.caution{display:flex;gap:10px;align-items:flex-start;background:var(--line2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink2);margin-top:14px}
+.caution svg{width:18px;height:18px;margin-top:1px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.tile{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:92px;transition:box-shadow .15s,transform .15s,border-color .15s}
+.tile:hover{border-color:var(--blue);box-shadow:var(--shadow);transform:translateY(-2px)}
+.tile b{font-size:13.5px;line-height:1.2}
 .tile.ghost{visibility:hidden}
-@media(max-width:480px){.tile{min-height:78px;padding:7px}.tile .t-v{font-size:19px}.tile .t-n{font-size:11.5px}.tile .t-b{font-size:10.5px}}
-#geoMap{height:420px}
-.mapside h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
-.bandlist{display:grid;gap:8px;margin-bottom:16px}
-.bandrow{display:flex;align-items:center;gap:10px;font-size:14px}
-.bandrow .sw{width:26px;height:20px}
-.bandrow b{margin-left:auto;font-variant-numeric:tabular-nums}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:13px;background:var(--brand-soft);color:var(--brand-ink);font-weight:600;border:1px solid transparent}
-.chip.miss{background:transparent;border:1px dashed var(--nr-line);color:var(--muted)}
-.chip.acc{background:var(--accent-soft);color:var(--ink)}
-button.chip{cursor:pointer}
+.strip{display:grid;grid-template-columns:repeat(9,1fr);gap:3px}
+.strip i{display:block;height:14px;border-radius:3px}
+@media(max-width:560px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tile.ghost{display:none}}
+.years{position:relative;margin-top:6px}
+.yrow{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line2)}
+.yrow:last-child{border-bottom:0}
+.yrow .y{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.yrow .y small{display:block;font-size:11.5px;color:var(--muted);font-weight:600}
+.offs{display:grid;gap:8px}
+.off{display:grid;grid-template-columns:minmax(150px,220px) 1fr auto;gap:10px;align-items:center;font-size:13.5px}
+.off .tr{height:10px;border-radius:5px;background:var(--line2);overflow:hidden}
+.off .fl{height:100%;background:var(--blue);border-radius:5px}
+@media(max-width:560px){.off{grid-template-columns:1fr auto}.off .tr{grid-column:1/-1;order:3}}
 
-/* ================= Tables ================= */
-.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
-table{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}
-th{font-size:12px;font-weight:700;color:var(--muted);text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:bottom;background:var(--card)}
-td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
-tr:last-child td{border-bottom:0}
-.matrix th.crit{text-align:center;min-width:94px;line-height:1.25}
-.matrix td.cell{padding:3px}
-.matrix .cellbox{display:flex;align-items:center;justify-content:center;gap:5px;border-radius:7px;min-height:36px;font-size:12.5px;font-weight:700;padding:4px 6px;white-space:nowrap}
-.matrix td:first-child,.matrix th:first-child{position:sticky;left:0;background:var(--card);z-index:2;min-width:150px;box-shadow:1px 0 0 var(--line)}
-.matrix tr.sel td{background:var(--accent-soft)}
-.matrix tr.sel td:first-child{background:var(--accent-soft)}
-.matrix tr.dim td{opacity:.42}
-.matrix tr.avg td{border-top:2px solid var(--line);font-weight:700}
-.mname{appearance:none;background:none;border:0;padding:0;font-weight:700;cursor:pointer;text-align:left;color:var(--ink)}
-.mname:hover{color:var(--accent);text-decoration:underline}
-.idxcell{min-width:150px}
-.idxbar{display:flex;align-items:center;gap:8px}
-.idxbar .tr{flex:1;height:10px;border-radius:5px;background:var(--track);overflow:hidden}
-.idxbar .fl{height:100%;border-radius:5px}
-.idxbar b{min-width:28px;text-align:right;font-variant-numeric:tabular-nums}
-.idxbar small{color:var(--muted);font-size:11.5px;white-space:nowrap}
-.offices td.ck,.offices th.ck{text-align:center}
-.yes{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--brand);color:#fff;font-weight:800;font-size:13px}
-.no{color:var(--muted)}
-.data th button{appearance:none;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
-.data th button::after{content:" ↕";opacity:.4}
-.data th button[data-dir="asc"]::after{content:" ↑";opacity:1}
-.data th button[data-dir="desc"]::after{content:" ↓";opacity:1}
-.data td{white-space:nowrap}
-.data td.wrap{white-space:normal;min-width:200px}
+/* ---------- B: criterios ---------- */
+.gnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.gnav a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:700;border:1px solid}
+.grp-h{display:flex;gap:12px;align-items:center;margin:34px 0 14px;scroll-margin-top:90px}
+.grp-h .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.grp-h h3{font-size:21px;font-weight:800;letter-spacing:-.01em}
+.grp-h p{font-size:13.5px;color:var(--muted)}
+.crit{border-left:5px solid var(--tc,var(--blue));scroll-margin-top:90px}
+.crit .chd{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.crit .num{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:14px;background:var(--tcs);color:var(--tc);flex:none}
+.crit .chd h4{font-size:17px;font-weight:700;line-height:1.3}
+.crit .chd p{font-size:13.5px;color:var(--muted);margin-top:2px}
+.levels{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;margin-top:4px}
+@media(max-width:980px){.levels{grid-template-columns:1fr}}
+.lv{border-radius:12px;padding:14px;background:var(--bg)}
+.lv .lt{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.lv .lt svg{width:16px;height:16px}
+.lv.l1{background:var(--surface);border:1px solid var(--line)}
+.lv.l1 .lt{color:var(--ink2)}
+.lv.l2 .lt{color:var(--blue-d)}
+.lv.l3{background:#FFF8EC;border:1px dashed #E9C987}
+.lv.l3 .lt{color:#8A5600}
+.lv p,.lv li{font-size:13.5px;line-height:1.5}
+.lv ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.lv .valid{font-size:11.5px;color:#8A5600;margin-top:8px;font-style:italic}
+.extra{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.ex{border:1px solid var(--line);border-radius:10px;padding:12px}
+.ex h5{margin:0 0 8px;font-size:13.5px}
+.mini{display:grid;gap:6px}
+.mini .mr{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:13px;align-items:center}
+.mini .mr .ms{font-size:12px;color:var(--muted);grid-column:1/-1;margin-top:-4px}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+table.mt{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+.mt th{font-size:12px;font-weight:700;color:var(--ink2);padding:8px 6px;text-align:center;vertical-align:bottom;line-height:1.25;border-bottom:1px solid var(--line);background:var(--surface)}
+.mt th.g{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;border-bottom:0}
+.mt td{padding:5px;text-align:center;border-bottom:1px solid var(--line2)}
+.mt td:first-child,.mt th:first-child{position:sticky;left:0;background:var(--surface);text-align:left;z-index:1;min-width:150px;font-weight:600}
+.mt td .pill{min-width:92px;justify-content:center}
+details.full{margin-top:28px}
+details.full summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;padding:16px 20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+details.full summary::-webkit-details-marker{display:none}
+details.full summary .chev{margin-left:auto;transition:transform .2s}
+details.full[open] summary .chev{transform:rotate(90deg)}
+details.full[open] summary{border-radius:var(--radius) var(--radius) 0 0}
+details.full .body{background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--radius) var(--radius);padding:16px 20px}
+
+/* ---------- C: apoyo ---------- */
+.hbars{display:grid;gap:14px}
+.hb .top2{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:5px}
+.hb .top2 b{white-space:nowrap;font-variant-numeric:tabular-nums}
+.hb .tr{height:12px;border-radius:6px;background:var(--line2);overflow:hidden}
+.hb .fl{height:100%;border-radius:6px;background:var(--hc,var(--blue))}
+.hb .who{font-size:12.5px;color:var(--muted);margin-top:4px}
+.hb .who button{appearance:none;background:none;border:0;padding:0;font:inherit;color:var(--ink2);cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:2px}
+.hb .who button:hover{color:var(--blue)}
+.countnote{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.cn{font-size:12.5px;background:var(--line2);border-radius:8px;padding:4px 10px;color:var(--ink2)}
+.cn b{color:var(--ink)}
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:900px){.lanes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.lanes{grid-template-columns:1fr}}
+.lane{border-radius:12px;padding:12px;border-top:5px solid var(--lc);background:var(--bg)}
+.lane h4{font-size:14px}
+.lane .ln{font-size:30px;font-weight:800;line-height:1.1;margin:2px 0 8px}
+.lane .m{font-size:13px;padding:6px 0;border-top:1px solid var(--line)}
+.lane .m button{appearance:none;background:none;border:0;padding:0;font:inherit;font-weight:700;cursor:pointer;color:var(--ink)}
+.lane .m button:hover{color:var(--blue)}
+.lane .m small{display:block;color:var(--muted);font-size:12px}
+.cross{width:100%;border-collapse:collapse;font-size:13.5px}
+.cross th{text-align:left;font-size:12px;color:var(--muted);font-weight:700;padding:8px;border-bottom:1px solid var(--line)}
+.cross td{padding:10px 8px;border-bottom:1px solid var(--line2);vertical-align:top}
+.cross td.n{font-weight:800;font-size:16px;white-space:nowrap}
+.orient{background:#FFF8EC;border:1px dashed #E9C987}
+.orient ul{margin:0;padding-left:20px;display:grid;gap:10px}
+.orient li{font-size:14.5px;line-height:1.5}
+.orient .lt{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8A5600;margin-bottom:6px}
+
+/* ---------- D: municipio ---------- */
+.mpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.mpick .tile{min-height:auto}
+.mpick .tile.on{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue)}
+.mbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:18px 0 12px}
+.mbar .nav2{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:10px;padding:8px 14px;font-size:13.5px;font-weight:700;cursor:pointer;transition:filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn.gh{background:var(--surface);color:var(--blue)}
+.btn svg{width:17px;height:17px}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.sh-top{background:var(--blue-d);color:#fff;padding:20px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:flex-end}
+.sh-top .k{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#B9CDE8;font-weight:700}
+.sh-top h3{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:2px}
+.sh-top .meta{font-size:13px;color:#DCE7F5;text-align:right}
+@media(max-width:600px){.sh-top .meta{text-align:left}}
+.sh-body{padding:20px 24px 24px}
+.summ{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:6px}
+.summ .bar{flex:1;min-width:240px}
+.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+@media(max-width:900px){.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.four{grid-template-columns:1fr}}
+.col4{border-radius:12px;padding:12px;background:var(--cs);border-top:4px solid var(--cc)}
+.col4 h4{font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+.col4 h4 b{font-size:20px}
+.col4 ul{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.col4 li{font-size:13px;line-height:1.35;background:rgba(255,255,255,.75);border-radius:8px;padding:6px 8px}
+.col4 li small{display:block;color:var(--muted);font-size:11.5px}
+.sh-sec{margin-top:20px}
+.sh-sec>h4{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--line2)}
+.sh-sec>h4 .sw{width:10px;height:18px;border-radius:3px}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:800px){.trio{grid-template-columns:1fr}}
+.tt{border:1px solid var(--line);border-radius:12px;padding:12px;border-left:5px solid var(--tc)}
+.tt .h{font-weight:700;font-size:14px;margin-bottom:6px}
+.tt .q{font-size:12px;color:var(--muted);margin-bottom:8px}
+.tt .d{font-size:12.5px;color:var(--ink2);margin-top:8px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}
+@media(max-width:700px){.facts{grid-template-columns:1fr}}
+.fact dt{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.fact dd{margin:3px 0 0;font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tg{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border-radius:8px;padding:3px 9px;background:var(--blue-s);color:var(--blue-d);font-weight:600}
+.tg.off{background:var(--line2);color:var(--muted);font-weight:500}
+.tg svg{width:12px;height:12px;stroke-width:2.6}
+.vq{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
+.vbox{background:#FFF8EC;border:1px dashed #E9C987;border-radius:12px;padding:14px 16px}
+.vbox .lt{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8A5600;margin-bottom:8px}
+.sh-foot{margin-top:18px;padding-top:10px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
 .reserved{color:var(--muted);font-style:italic}
-.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
-.tools input{flex:1;min-width:180px;max-width:360px;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:8px 12px}
 
-/* ================= Plazos ================= */
-.lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:relative}
-.lane{border-radius:10px;background:var(--bg);padding:10px;min-height:120px;border:1px solid var(--line)}
-.lane h4{margin:0 0 2px;font-size:13px}
-.lane .ln{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
-.lane .chips{margin-top:8px}
-.lane .chip{font-size:12px;padding:3px 8px}
-.arrow{height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--brand2));margin:4px 0 10px;position:relative}
-.arrow::after{content:"";position:absolute;right:-2px;top:-5px;border:8px solid transparent;border-left:10px solid var(--brand2);border-right:0}
-@media(max-width:420px){.lanes{grid-template-columns:1fr}}
+footer.foot{border-top:1px solid var(--line);padding:18px 0 32px;font-size:12.5px;color:var(--muted)}
+footer.foot .wrap{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between}
 
-/* ================= Lectura ================= */
-.findings{list-style:none;padding:0;margin:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.findings li{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.45}
-.findings .fi{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:800;font-size:14px}
-.findings b{font-weight:700}
-
-/* ================= Ficha ================= */
-.ficha-top{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-end;margin-bottom:16px}
-.ficha-top h3{font-size:26px;font-weight:800}
-.cmp{flex:1;min-width:240px;max-width:520px}
-.cmp .row{display:grid;grid-template-columns:110px 1fr 36px;gap:8px;align-items:center;font-size:13px;margin:4px 0}
-.cmp .tr{height:12px;border-radius:6px;background:var(--track);overflow:hidden}
-.cmp .fl{height:100%;border-radius:6px}
-.semcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.semcard{border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;min-height:92px}
-.semcard .sc-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px}
-.semcard .sc-q{font-size:12.5px;opacity:.92;line-height:1.35}
-.facts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:16px}
-.fact{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px}
-.fact dt{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:6px}
-.fact dd{margin:0;font-size:14.5px}
-.quality{font-size:14px;color:var(--ink2);display:grid;gap:6px;margin-top:6px}
-.quality li{margin-left:18px}
-footer.foot{margin-top:30px;padding:18px 0 30px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
-
-/* ================= Print ================= */
+/* ---------- Ajustes de revisión ---------- */
+.ctrl{display:flex;gap:10px;align-items:flex-start;background:#FFF4E5;border:1px solid #F1CF98;border-radius:10px;padding:10px 12px;font-size:13px;color:#5A4210;margin-bottom:14px}
+.ctrl svg{width:18px;height:18px;flex:none;margin-top:1px}
+.prop{margin-top:14px;border:1px solid #C8DAF2;background:var(--blue-s);border-radius:12px;padding:12px 14px}
+.prop .lt{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--blue-d);margin-bottom:8px}
+/* ---------- Estado de los datos ---------- */
+.estado{margin-top:14px}
+.est{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-radius:12px;padding:10px 14px;font-size:13.5px;border:1px solid var(--line);background:var(--surface)}
+.est svg{width:18px;height:18px;flex:none}
+.est span{flex:1;min-width:200px}
+.est.ok{border-color:#BFE2CC;background:var(--v-s);color:#1D5A37}
+.est.info{border-color:#C8DAF2;background:var(--blue-s);color:var(--blue-d)}
+.est.warn{border-color:#F1CF98;background:#FFF4E5;color:#5A4210}
+.est.err{border-color:#EDB7B4;background:var(--r-s);color:#7A2622}
+.btn.sm2{padding:5px 12px;font-size:13px}
+.vacia{padding:60px 0;text-align:center;color:var(--muted);font-size:15px}
+/* ---------- Impresión: ficha municipal ---------- */
 @media print{
-  @page{size:A4 landscape;margin:12mm}
-  body{background:#fff;font-size:12px}
-  .top{position:static;box-shadow:none;background:#fff;color:#14232E;border-bottom:2px solid #0F4C5C}
-  .title p,.meta{color:#46596A}.tag{color:#14232E;border-color:#ccd}
-  .controls,.tools,.banner.demo~x,.noprint{display:none!important}
-  .card,.kpi{box-shadow:none;animation:none;break-inside:avoid}
-  .sec{break-before:page;margin-top:0}
-  #sec-kpi{break-before:auto}
-  .tscroll{overflow:visible}
-  .matrix td:first-child,.matrix th:first-child{position:static}
-  .chart svg{max-width:100%;height:auto}
-  .tile:hover{transform:none}
+  @page{size:letter;margin:9mm}
+  html{scroll-behavior:auto}
+  body{background:#fff;font-size:10px}
+  .top,nav.qs,footer.foot,.noprint,.hero,.mpick,.mbar,.estado{display:none!important}
+  main{padding:0}
+  .wrap{padding:0;max-width:none}
+  .sheet{box-shadow:none;border:1px solid var(--line);zoom:.7}
+  .col4,.tt,.fact{break-inside:avoid}.col4 ul{gap:3px;margin-top:6px}.col4 li{padding:3px 6px;font-size:11.5px;line-height:1.25}.col4 h4 b{font-size:16px}.sh-top h3{font-size:24px}.summ{margin-bottom:0}.vq{gap:3px;font-size:12.5px}.vbox{padding:10px 12px}.facts{gap:8px 20px!important}.tt{padding:9px}.tt .d{margin-top:5px}.four{gap:8px!important;margin-top:10px}
+  .four{grid-template-columns:repeat(4,minmax(0,1fr))!important}.trio{grid-template-columns:repeat(3,minmax(0,1fr))!important}.facts{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .tt .q,.col4 li small{display:none}.sh-sec{margin-top:12px}.sh-top{padding:14px 20px}.sh-body{padding:14px 20px 16px}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .fade{animation:none}
 }
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap top-in">
-    <div class="title">
-      <h1>PDM-OT <span>·</span> Chiquimula</h1>
-      <p>Diagnóstico rápido: uso, actualización y acompañamiento · Red de DMP · SEGEPLAN / CRS</p>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></svg></div>
+      <div><h1>Diagnóstico del PDM-OT · Chiquimula</h1><p>Uso, actualización y acompañamiento del Plan de Desarrollo Municipal y Ordenamiento Territorial · Red de DMP · SEGEPLAN / CRS</p></div>
     </div>
-    <div class="meta">
-      <span class="tag none" id="srcTag"><i></i><span>Sin datos</span></span>
-      <span id="syncTxt">Sin sincronizar</span>
-    </div>
-    <div class="controls">
-      <label class="selwrap" for="muni">Municipio
-        <select id="muni"><option value="">Vista departamental (11 municipios)</option></select>
-      </label>
-      <button class="btn primary" id="btnRefresh" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg><span>Actualizar vista</span></button>
-      <button class="btn" id="btnPrint" type="button">Imprimir / PDF</button>
-    </div>
+    <span class="proto">Prototipo para revisión</span>
   </div>
 </header>
+<nav class="qs" aria-label="Secciones del visor"><div class="wrap qs-in" id="nav"></div></nav>
+<div class="wrap"><div id="estado" class="estado" role="status" aria-live="polite"></div></div>
+<main class="wrap" id="view" tabindex="-1"></main>
+<footer class="foot"><div class="wrap"><span id="fuente"></span><span>Valoraciones declaradas por cada DMP. No son una evaluación ni una verificación institucional.</span></div></footer>
 
-<main class="wrap">
-  <div class="banner" id="banner" role="status"></div>
-  <div class="banner err" id="error" role="alert"></div>
-
-  <!-- KPIs -->
-  <section id="sec-kpi" class="kpis" aria-label="Indicadores clave"></section>
-
-
-  <!-- Cómo leer -->
-  <details class="howto" id="howto">
-    <summary><span class="hq">?</span> Cómo leer este visor <small>(pulse para ver la explicación)</small></summary>
-    <div class="howgrid">
-      <div><h4>¿Qué se preguntó?</h4><p>Cada Dirección Municipal de Planificación (DMP) respondió un diagnóstico rápido sobre su PDM-OT: si está vigente, si lo usan para planificar e invertir, cómo dan seguimiento a sus metas y qué apoyo necesitan. Se toma <b>una respuesta por municipio</b> (la más reciente).</p></div>
-      <div><h4>El semáforo (9 criterios)</h4><p>Cada criterio se valoró así:</p>
-        <ul><li><i class="sw st-verde">✓</i> <b>Verde · Adecuado:</b> funciona o se utiliza.</li><li><i class="sw st-amarillo">!</i> <b>Amarillo · Parcial:</b> existe, pero necesita fortalecerse.</li><li><i class="sw st-rojo">✕</i> <b>Rojo · Pendiente:</b> no está desarrollado o no se usa.</li><li><i class="sw st-sin_informacion">?</i> <b>Sin información:</b> quien respondió no tenía datos para valorarlo.</li></ul></div>
-      <div><h4>El índice de uso (0 a 100)</h4><p>Resume el semáforo en un número: verde vale 2 puntos, amarillo 1 y rojo 0. Se suman los puntos y se dividen entre el máximo posible.</p>
-        <p class="ex"><b>Ejemplo:</b> 4 verdes, 4 amarillos y 1 rojo = 8 + 4 + 0 = 12 puntos de 18 posibles → <b>67</b>.</p>
-        <p>Los criterios «sin información» no cuentan ni a favor ni en contra: el índice se calcula solo con los que sí se valoraron. Por eso un municipio con muchos «sin información» debe leerse con cautela.</p></div>
-      <div><h4>Niveles y colores del mapa</h4><ul><li><b>Alto (70–100):</b> el plan se usa en la mayoría de aspectos.</li><li><b>Medio (40–69):</b> uso parcial; hay base para fortalecer.</li><li><b>Bajo (0–39):</b> el plan casi no orienta la gestión.</li><li><b>Rayado gris:</b> el municipio aún no responde.</li></ul>
-        <p>El índice <b>no califica a la DMP</b>: muestra dónde conviene acompañar.</p></div>
-      <div><h4>Otros indicadores</h4><ul><li><b>Antigüedad:</b> años desde que se aprobó el plan; con 5 años o más conviene revisar si necesita actualización.</li><li><b>Brecha de seguimiento:</b> municipios que no tienen registro de metas o que no revisan avances con una periodicidad definida.</li><li><b>Preguntas de selección múltiple</b> (temas, apoyos, oficinas): un municipio puede marcar varias opciones, por eso las barras no suman el total.</li></ul></div>
-      <div><h4>Cómo usarlo</h4><ul><li>Elija un municipio en el filtro (o púlselo en el mapa, la matriz o el ranking) para ver su <b>ficha municipal</b>.</li><li>Pase el cursor sobre barras y celdas para ver el detalle.</li><li>Los datos se actualizan solos cada 5 minutos desde Kobo.</li><li>Por privacidad no se muestran nombres ni los textos abiertos (acción, responsable y observaciones).</li></ul></div>
-    </div>
-  </details>
-
-  <!-- Mapa -->
-  <section class="sec" id="sec-map">
-    <div class="sec-h"><h2>Mapa del departamento</h2><p>Índice de uso del PDM-OT por municipio · pulse un municipio para filtrar</p></div>
-    <article class="card">
-      <header><h3 id="t-map">Índice de uso del PDM-OT por municipio</h3><p class="sub" id="s-map"></p></header>
-      <div class="mapwrap">
-        <div><div id="geoMap" hidden></div><div class="tiles" id="tiles" role="group" aria-label="Municipios de Chiquimula"></div><p class="note" id="mapNote"></p></div>
-        <div class="mapside">
-          <h4>Índice de uso (0–100)</h4>
-          <div class="bandlist" id="bandList"></div>
-          <h4>Municipios sin respuesta</h4>
-          <div class="chips" id="missingList"></div>
-        </div>
-      </div>
-    </article>
-  </section>
-
-  <!-- Matriz semáforo -->
-  <section class="sec" id="sec-matrix">
-    <div class="sec-h"><h2>Matriz semáforo</h2><p>9 criterios valorados por cada DMP · filas ordenadas por índice de uso</p></div>
-    <article class="card">
-      <header><h3 id="t-matrix">Semáforo por municipio y criterio</h3>
-        <div class="legend" style="margin-top:8px">
-          <span><i class="sw st-verde">✓</i>Adecuado</span><span><i class="sw st-amarillo">!</i>Parcial</span><span><i class="sw st-rojo">✕</i>Pendiente</span><span><i class="sw st-sin_informacion">?</i>Sin información</span><span><i class="sw st-nr"></i>Sin respuesta</span>
-        </div>
-      </header>
-      <div class="tscroll"><div id="matrix"></div></div>
-      <p class="note">Índice de uso = (verde × 2 + amarillo × 1) ÷ (2 × criterios con valoración) × 100. «Sin información» no entra en el cálculo.</p>
-    </article>
-  </section>
-
-  <!-- Criterios y ranking -->
-  <section class="sec" id="sec-crit">
-    <div class="sec-h"><h2>Criterios y ranking</h2><p>Qué aspecto del plan está más rezagado y qué municipios lo usan más</p></div>
-    <div class="grid">
-      <article class="card c-7"><header><h3 id="t-stack">Valoraciones por criterio</h3><p class="sub">Distribución 100 % de municipios con respuesta · de más débil (arriba) a más fuerte</p></header><div class="chart" id="chStack"></div><p class="how"><b>Cómo leerlo:</b> cada barra es un criterio y suma 100 % de los municipios que respondieron. Mientras más rojo y amarillo, más rezagado está ese aspecto del plan. Los números dentro de la barra son cantidad de municipios.</p></article>
-      <article class="card c-5"><header><h3 id="t-rank">Ranking del índice de uso</h3><p class="sub">Índice 0–100 · la línea marca el promedio departamental</p></header><div class="chart" id="chRank"></div><p class="how"><b>Cómo leerlo:</b> cada barra es el índice de uso del municipio (0 a 100). El color indica el nivel (rojo bajo, amarillo medio, verde alto) y la línea punteada el promedio del departamento.</p><p class="note" id="rankNote"></p></article>
-    </div>
-  </section>
-
-  <!-- Estado del plan -->
-  <section class="sec" id="sec-plan">
-    <div class="sec-h"><h2>Estado del plan</h2><p>Año de aprobación, actualización en curso y oficinas existentes</p></div>
-    <div class="grid">
-      <article class="card c-5"><header><h3 id="t-year">Año de aprobación del PDM-OT</h3><p class="sub">Franja: planes con 5 años o más (posible actualización)</p></header><div class="chart" id="chYear"></div><p class="how"><b>Cómo leerlo:</b> cada punto es el año en que se aprobó el PDM-OT del municipio. Los puntos naranja, dentro de la franja, tienen 5 años o más y podrían requerir actualización.</p><p class="note" id="yearNote"></p></article>
-      <article class="card c-3"><header><h3 id="t-upd">¿Lo están actualizando?</h3><p class="sub">Municipios con respuesta</p></header><div class="chart" id="chUpd" style="height:260px"></div></article>
-      <article class="card c-4"><header><h3 id="t-off">Oficinas municipales existentes</h3><p class="sub">UGAM · DMM · GIRD · OMDEL · OMSAN</p></header><div class="tscroll"><div id="offices"></div></div></article>
-    </div>
-  </section>
-
-  <!-- Seguimiento de metas -->
-  <section class="sec" id="sec-seg">
-    <div class="sec-h"><h2>Seguimiento de metas</h2><p id="gapTxt">Dónde se registran, qué contienen y cada cuánto se revisan</p></div>
-    <div class="grid">
-      <article class="card c-4"><header><h3 id="t-medios">Medios de registro de metas</h3><p class="sub">Municipios que mencionan cada medio (selección múltiple)</p></header><div class="chart" id="chMedios"></div></article>
-      <article class="card c-4"><header><h3 id="t-cont">Contenido del registro</h3><p class="sub">Solo municipios que tienen registro</p></header><div class="chart" id="chCont"></div></article>
-      <article class="card c-4"><header><h3 id="t-freq">Frecuencia de revisión</h3><p class="sub">En rojo: sin revisión o sin periodicidad</p></header><div class="chart" id="chFreq"></div></article>
-    </div>
-  </section>
-
-  <!-- Demanda de acompañamiento -->
-  <section class="sec" id="sec-dem">
-    <div class="sec-h"><h2>Demanda de acompañamiento</h2><p>Temas, apoyos, necesidad, modalidad y plazos que piden las DMP</p></div>
-    <div class="grid">
-      <article class="card c-6"><header><h3 id="t-temas">Temas prioritarios</h3><p class="sub">Número de municipios que lo señalan</p></header><div class="chart" id="chTemas"></div></article>
-      <article class="card c-6"><header><h3 id="t-apoyos">Apoyos requeridos</h3><p class="sub">Número de municipios que lo piden</p></header><div class="chart" id="chApoyos"></div></article>
-      <article class="card c-4"><header><h3 id="t-nec">Necesidad principal</h3><p class="sub">Una respuesta por municipio</p></header><div class="chart" id="chNec" style="height:330px"></div></article>
-      <article class="card c-4"><header><h3 id="t-mod">Modalidad preferida</h3><p class="sub">Una respuesta por municipio</p></header><div class="chart" id="chMod" style="height:260px"></div></article>
-      <article class="card c-4"><header><h3 id="t-plazo">Plazo para iniciar</h3><p class="sub">Municipios agrupados por plazo</p></header><div class="arrow" aria-hidden="true"></div><div class="lanes" id="lanes"></div><div id="laneExtra"></div></article>
-    </div>
-  </section>
-
-  <!-- Lectura automática -->
-  <section class="sec" id="sec-read">
-    <div class="sec-h"><h2>Lectura automática</h2><p>Hallazgos calculados con los datos cargados</p></div>
-    <article class="card"><ul class="findings" id="findings"></ul></article>
-  </section>
-
-  <!-- Ficha municipal -->
-  <section class="sec" id="sec-ficha" hidden>
-    <div class="sec-h"><h2>Ficha municipal</h2><p>Resumen del municipio seleccionado</p></div>
-    <article class="card" id="ficha"></article>
-  </section>
-
-  <!-- Tabla -->
-  <section class="sec" id="sec-table">
-    <div class="sec-h"><h2>Respuestas</h2><p id="tableSub">Tabla ordenable y buscable</p></div>
-    <div class="grid">
-      <article class="card c-12">
-        <div class="tools"><input type="search" id="q" placeholder="Buscar municipio, cargo, necesidad…" aria-label="Buscar en la tabla"><span class="note" id="tableCount" style="margin:0"></span></div>
-        <div class="tscroll"><div id="table"></div></div>
-      </article>
-      <article class="card c-12"><header><h3>Calidad de datos</h3><p class="sub">Revisión automática de la carga</p></header><ul class="quality" id="quality"></ul></article>
-    </div>
-  </section>
-
-  <footer class="foot"><span>Diagnóstico rápido del PDM-OT · 11 municipios de Chiquimula · Red de DMP · SEGEPLAN / CRS</span><span id="footSync"></span></footer>
-</main>
-
+<!--DATOS_LOCALES: scripts/empaquetar_local.py inserta aquí una copia de data.json para revisar el visor sin servidor-->
 <script>
 'use strict';
-/* =====================================================================
-   1. Catálogos
-   ===================================================================== */
-const SCHEMA={
- municipios:{chiquimula:'Chiquimula',san_jose_la_arada:'San José La Arada',san_juan_ermita:'San Juan Ermita',jocotan:'Jocotán',camotan:'Camotán',olopa:'Olopa',esquipulas:'Esquipulas',concepcion_las_minas:'Concepción Las Minas',quezaltepeque:'Quezaltepeque',san_jacinto:'San Jacinto',ipala:'Ipala'},
+/* =========================================================
+   1. Datos y catálogo de la boleta
+   ========================================================= */
+let D=null;          /* datos normalizados; se llenan al leer data.json */
+let R={},RESP=[],MISS=[],N=0;
+const REF_YEAR=2026;
+const MUN={chiquimula:'Chiquimula',san_jose_la_arada:'San José La Arada',san_juan_ermita:'San Juan Ermita',jocotan:'Jocotán',camotan:'Camotán',olopa:'Olopa',esquipulas:'Esquipulas',concepcion_las_minas:'Concepción Las Minas',quezaltepeque:'Quezaltepeque',san_jacinto:'San Jacinto',ipala:'Ipala'};
+const ALPHA=Object.keys(MUN).sort((a,b)=>MUN[a].localeCompare(MUN[b],'es'));
+
+/* Los 9 criterios en el orden de la boleta. Cada uno con tres niveles de lectura. */
+const CRIT=[
+ {k:'datos_actuales',n:1,s:'Actualidad de los datos',q:'¿Los datos del plan reflejan suficientemente la situación actual del municipio?',g:'cont',tema:['datos'],apoyo:['datos_mapas','actualizacion'],
+  sig:{verde:'los datos del plan describen bien la situación actual del municipio',amarillo:'parte de los datos está desactualizada o incompleta',rojo:'los datos ya no reflejan la situación del municipio'},
+  preg:'¿Qué datos del plan considera la DMP que ya no reflejan la situación actual del municipio?'},
+ {k:'prioridades',n:2,s:'Vigencia de problemas y prioridades',q:'¿Los problemas y prioridades responden a las necesidades actuales del territorio?',g:'cont',tema:['prioridades'],apoyo:['actualizacion'],
+  sig:{verde:'los problemas y prioridades del plan siguen respondiendo al territorio',amarillo:'algunos problemas o prioridades cambiaron',rojo:'los problemas y prioridades ya no responden a las necesidades actuales'},
+  preg:'¿Qué problemas o prioridades del plan considera la DMP que han cambiado?'},
+ {k:'gestion_riesgo',n:3,s:'Vinculación con la gestión del riesgo',q:'¿El plan orienta acciones para reducir los riesgos que afectan al municipio?',g:'risk',tema:['riesgo'],apoyo:[],
+  sig:{verde:'el plan orienta acciones para reducir los riesgos del municipio',amarillo:'el plan aborda el riesgo, pero solo en parte',rojo:'el plan todavía no orienta acciones de reducción del riesgo'},
+  preg:'¿Qué orientaciones para reducir el riesgo contiene hoy el plan y en qué decisiones municipales se usan?',
+  nota:'Valora lo que dice el plan, no la gestión del riesgo que realiza la municipalidad.'},
+ {k:'metas_medibles',n:4,s:'Metas con indicadores medibles',q:'¿Las metas cuentan con indicadores que permiten medir su cumplimiento?',g:'seg',tema:['metas'],apoyo:['herramienta_metas'],
+  sig:{verde:'las metas tienen indicadores para medir su cumplimiento',amarillo:'solo algunas metas tienen indicadores',rojo:'las metas no tienen indicadores para medirlas'},
+  preg:'¿Qué metas del plan cuentan hoy con un indicador y cuáles no?'},
+ {k:'registro_metas',n:5,s:'Registro organizado de metas y avances',q:'¿Existe un registro organizado de las metas del PDM-OT y los avances alcanzados?',g:'seg',tema:['registro_seguimiento'],apoyo:['herramienta_metas'],
+  sig:{verde:'existe un registro organizado de metas y avances',amarillo:'el registro existe, pero está incompleto o disperso',rojo:'no existe un registro organizado'},
+  preg:'¿Dónde se registran hoy las metas y los avances del plan, y qué información se anota?'},
+ {k:'uso_planificacion',n:6,s:'Uso en PEI, POM y POA',q:'¿Utilizan el PDM-OT para elaborar o revisar el PEI, POM y POA?',g:'plan',tema:['vinculacion'],apoyo:['formatos'],
+  sig:{verde:'el PDM-OT se usa al elaborar o revisar el PEI, POM y POA',amarillo:'el PDM-OT se usa solo en parte para esos instrumentos',rojo:'el PDM-OT todavía no se usa para elaborar el PEI, POM y POA'},
+  preg:'¿En qué momento de la elaboración del PEI, POM y POA se consulta hoy el PDM-OT?'},
+ {k:'uso_inversion',n:7,s:'Uso para priorizar inversiones',q:'¿Utilizan el PDM-OT para priorizar proyectos e inversiones municipales?',g:'plan',tema:['inversion'],apoyo:[],
+  sig:{verde:'el PDM-OT orienta la priorización de proyectos e inversiones',amarillo:'el PDM-OT orienta la inversión solo en parte',rojo:'el PDM-OT todavía no se usa para priorizar la inversión'},
+  preg:'¿Cómo se toman en cuenta las prioridades del PDM-OT al seleccionar los proyectos de inversión?'},
+ {k:'uso_territorio',n:8,s:'Uso de orientaciones del suelo y ordenamiento',q:'¿Utilizan las orientaciones de uso del suelo para tomar decisiones sobre el territorio?',g:'risk',tema:['uso_suelo'],apoyo:['datos_mapas'],
+  sig:{verde:'las orientaciones de uso del suelo se usan para decidir sobre el territorio',amarillo:'se usan solo en algunas decisiones',rojo:'todavía no se usan para decidir sobre el territorio'},
+  preg:'¿En qué decisiones sobre el territorio se consultan hoy las orientaciones de uso del suelo del plan?'},
+ {k:'seguimiento',n:9,s:'Seguimiento periódico para decidir',q:'¿Revisan periódicamente los avances del PDM-OT para tomar decisiones?',g:'seg',tema:['registro_seguimiento','metas'],apoyo:['seguimiento'],
+  sig:{verde:'los avances se revisan periódicamente y se usan para decidir',amarillo:'los avances se revisan, pero sin regularidad o sin usarlos para decidir',rojo:'los avances del plan no se revisan'},
+  preg:'¿Cuándo y dónde se revisan hoy los avances del plan, y cómo se usan esos resultados?'}
+];
+const CK=Object.fromEntries(CRIT.map(c=>[c.k,c]));
+const GROUPS=[
+ {k:'cont',n:'Contenido del plan',d:'¿Los datos, problemas y prioridades del PDM-OT siguen vigentes?',c:'var(--t-cont)',cs:'var(--t-cont-s)',ic:'doc'},
+ {k:'plan',n:'Planificación e inversión',d:'¿El PDM-OT orienta el PEI, POM, POA y la inversión municipal?',c:'var(--t-plan)',cs:'var(--t-plan-s)',ic:'plan'},
+ {k:'risk',n:'Gestión del riesgo y territorio',d:'¿El PDM-OT orienta la reducción del riesgo y el uso del suelo?',c:'var(--t-risk)',cs:'var(--t-risk-s)',ic:'shield'},
+ {k:'seg',n:'Metas y seguimiento',d:'¿Las metas se pueden medir, registrar y revisar?',c:'var(--t-seg)',cs:'var(--t-seg-s)',ic:'target'}
+];
+const GK=Object.fromEntries(GROUPS.map(g=>[g.k,g]));
+const ST={verde:{l:'Adecuado',f:'Verde · Adecuado: funciona o se utiliza',c:'var(--v)',cls:'bv'},amarillo:{l:'Parcial',f:'Amarillo · Parcial: necesita fortalecimiento',c:'var(--a)',cls:'ba'},rojo:{l:'Pendiente',f:'Rojo · Pendiente: no está desarrollado o no se utiliza',c:'var(--r)',cls:'br'},sin_informacion:{l:'Sin información',f:'Sin información para valorarlo',c:'var(--s)',cls:'bs'}};
+const SK=['verde','amarillo','rojo','sin_informacion'];
+const L={
  si_no_ns:{si:'Sí',no:'No',no_sabe:'No sabe'},
- semaforo:{verde:'🟢 Verde - Adecuado: funciona o se utiliza',amarillo:'🟡 Amarillo - Parcial: necesita fortalecimiento',rojo:'🔴 Rojo - Pendiente: no está desarrollado o no se utiliza',sin_informacion:'⚪ Sin información para valorarlo'},
- oficinas:{ugam:'UGAM - Unidad de Gestión Ambiental Municipal',dmm:'DMM - Dirección Municipal de la Mujer',gird:'Oficina de Gestión Integral de Riesgo / DIMGIR',omdel:'OMDEL / UMDEL - Desarrollo Económico Local',omsan:'OMSAN / DIMSAN - Seguridad Alimentaria y Nutricional',ninguna:'Ninguna de estas',no_sabe:'No sabe'},
- medios_registro:{excel:'Excel o matriz de seguimiento del PDM-OT',pei_pom_poa:'PEI, POM y POA',plataforma:'Sistema o plataforma digital',informes_actas:'Informes o actas',otro:'Otro',ninguno:'No existe registro',no_sabe:'No sabe'},
- contenido_registro:{indicador_base:'Indicador y línea base',valor_anio:'Valor esperado y año de cumplimiento',meta_periodo:'Meta del período de gobierno o anual',avance_fecha:'Avance alcanzado y fecha de corte',responsable:'Responsable',fuente:'Fuente de información',ninguno:'Ninguno de estos elementos',no_sabe:'No sabe'},
+ oficinas:{ugam:'UGAM · Gestión Ambiental',dmm:'DMM · Dirección Municipal de la Mujer',gird:'Gestión Integral de Riesgo (GIRD / DIMGIR)',omdel:'OMDEL / UMDEL · Desarrollo Económico Local',omsan:'OMSAN / DIMSAN · Seguridad Alimentaria'},
+ oficinasC:{ugam:'UGAM',dmm:'DMM',gird:'GIRD / DIMGIR',omdel:'OMDEL / UMDEL',omsan:'OMSAN / DIMSAN'},
+ medios:{excel:'Excel o matriz de seguimiento',pei_pom_poa:'PEI, POM y POA',plataforma:'Sistema o plataforma digital',informes_actas:'Informes o actas',otro:'Otro',ninguno:'No existe registro',no_sabe:'No sabe'},
+ contenido:{indicador_base:'Indicador y línea base',valor_anio:'Valor esperado y año de cumplimiento',meta_periodo:'Meta del período de gobierno o anual',avance_fecha:'Avance alcanzado y fecha de corte',responsable:'Responsable',fuente:'Fuente de información',ninguno:'Ninguno de estos elementos',no_sabe:'No sabe'},
  frecuencia:{trimestral:'Trimestral',cuatrimestral:'Cuatrimestral',semestral:'Semestral',anual:'Anual',sin_periodicidad:'Sin periodicidad definida',no_revisan:'No se revisan',no_sabe:'No sabe'},
- necesidad_principal:{implementacion:'Mejorar la implementación del plan actual',fortalecimiento:'Fortalecer contenidos o herramientas',actualizacion_parcial:'Actualizar parcialmente el plan',revision_integral:'Revisar integralmente el plan para definir su actualización',orientacion:'Recibir orientación para determinarlo'},
+ necesidad:{implementacion:'Mejorar la implementación del plan actual',fortalecimiento:'Fortalecer contenidos o herramientas',actualizacion_parcial:'Actualizar parcialmente el plan',revision_integral:'Revisar integralmente el plan para definir su actualización',orientacion:'Recibir orientación para determinarlo'},
  temas:{datos:'Datos e indicadores',prioridades:'Problemas y prioridades',metas:'Metas y resultados',riesgo:'Riesgo y cambio climático',uso_suelo:'Uso del suelo y ordenamiento territorial',vinculacion:'Vinculación con PEI-POM-POA',inversion:'Priorización de proyectos e inversiones',registro_seguimiento:'Registro de metas y seguimiento',otro:'Otro',ninguno:'No identifica temas prioritarios por ahora',por_definir:'Necesita orientación para definirlos'},
  apoyos:{asistencia:'Asistencia técnica individual',taller:'Taller práctico con el equipo municipal',formatos:'Formatos para vincular PDM-OT y PEI-POM-POA',datos_mapas:'Apoyo para actualizar datos o mapas',herramienta_metas:'Herramienta para registrar metas y avances',seguimiento:'Apoyo para organizar el seguimiento',actualizacion:'Orientación para actualizar el plan',intercambio:'Intercambio de experiencias municipales',otro:'Otro',ninguno:'No requiere apoyo por ahora',por_definir:'Tipo de apoyo por definir'},
- modalidades:{presencial:'Presencial',virtual:'Virtual',documental:'Revisión de documentos con comentarios',combinada:'Combinada',por_definir:'Por definir'},
- plazos:{treinta_dias:'Próximos 30 días',uno_tres_meses:'De 1 a 3 meses',mas_tres_meses:'Más de 3 meses',por_definir:'Por definir'}
+ modalidad:{presencial:'Presencial',virtual:'Virtual',documental:'Revisión de documentos con comentarios',combinada:'Combinada',por_definir:'Por definir'},
+ plazo:{treinta_dias:'Próximos 30 días',uno_tres_meses:'De 1 a 3 meses',mas_tres_meses:'Más de 3 meses',por_definir:'Por definir'}
 };
-/* Etiquetas cortas para gráficos */
-const SHORT={
- necesidad_principal:{implementacion:'Mejorar implementación',fortalecimiento:'Fortalecer contenidos',actualizacion_parcial:'Actualización parcial',revision_integral:'Revisión integral',orientacion:'Orientación para decidir'},
- oficinas:{ugam:'UGAM',dmm:'DMM',gird:'GIRD / DIMGIR',omdel:'OMDEL / UMDEL',omsan:'OMSAN / DIMSAN',ninguna:'Ninguna',no_sabe:'No sabe'},
- medios_registro:{excel:'Excel o matriz',pei_pom_poa:'PEI, POM y POA',plataforma:'Plataforma digital',informes_actas:'Informes o actas',otro:'Otro',ninguno:'No existe registro',no_sabe:'No sabe'},
- contenido_registro:{indicador_base:'Indicador y línea base',valor_anio:'Valor esperado y año',meta_periodo:'Meta del período',avance_fecha:'Avance y fecha de corte',responsable:'Responsable',fuente:'Fuente de información',ninguno:'Ninguno',no_sabe:'No sabe'},
- temas:{datos:'Datos e indicadores',prioridades:'Problemas y prioridades',metas:'Metas y resultados',riesgo:'Riesgo y cambio climático',uso_suelo:'Uso del suelo y OT',vinculacion:'Vinculación PEI-POM-POA',inversion:'Priorizar inversión',registro_seguimiento:'Registro y seguimiento',otro:'Otro',ninguno:'Ninguno por ahora',por_definir:'Por definir'},
- apoyos:{asistencia:'Asistencia técnica individual',taller:'Taller práctico',formatos:'Formatos PDM-OT ↔ PEI-POM-POA',datos_mapas:'Actualizar datos o mapas',herramienta_metas:'Herramienta de metas',seguimiento:'Organizar el seguimiento',actualizacion:'Orientación para actualizar',intercambio:'Intercambio de experiencias',otro:'Otro',ninguno:'No requiere por ahora',por_definir:'Por definir'},
- modalidades:{presencial:'Presencial',virtual:'Virtual',documental:'Revisión documental',combinada:'Combinada',por_definir:'Por definir'}
-};
-const CRIT=[
- ['datos_actuales','Datos actuales','¿Los datos del plan reflejan la situación actual?','¿Los datos del plan reflejan suficientemente la situación actual del municipio?'],
- ['prioridades','Prioridades','¿Problemas y prioridades responden a necesidades actuales?','¿Los problemas y prioridades responden a las necesidades actuales del territorio?'],
- ['gestion_riesgo','Gestión del riesgo','¿El plan orienta acciones para reducir riesgos?','¿El plan orienta acciones para reducir los riesgos que afectan al municipio?'],
- ['metas_medibles','Metas medibles','¿Las metas tienen indicadores?','¿Las metas cuentan con indicadores que permiten medir su cumplimiento?'],
- ['registro_metas','Registro de metas','¿Existe registro organizado de metas y avances?','¿Existe un registro organizado de las metas del PDM-OT y los avances alcanzados?'],
- ['uso_planificacion','Uso para planificar','¿Usan el PDM-OT para PEI, POM y POA?','¿Utilizan el PDM-OT para elaborar o revisar el PEI, POM y POA?'],
- ['uso_inversion','Uso para invertir','¿Lo usan para priorizar proyectos e inversión?','¿Utilizan el PDM-OT para priorizar proyectos e inversiones municipales?'],
- ['uso_territorio','Uso del suelo','¿Usan orientaciones de uso del suelo?','¿Utilizan las orientaciones de uso del suelo para tomar decisiones sobre el territorio?'],
- ['seguimiento','Seguimiento','¿Revisan periódicamente avances?','¿Revisan periódicamente los avances del PDM-OT para tomar decisiones?']
-];
-const CRIT_SHORT=Object.fromEntries(CRIT.map(c=>[c[0],c[1]]));
-const ST={verde:{l:'Adecuado',i:'✓',c:'--v'},amarillo:{l:'Parcial',i:'!',c:'--a'},rojo:{l:'Pendiente',i:'✕',c:'--r'},sin_informacion:{l:'Sin información',i:'?',c:'--s'}};
-/* Campo → lista de catálogo */
-const FIELD_LIST={municipio:'municipios',conoce_anio:'si_no_ns',en_actualizacion:'si_no_ns',oficinas_existentes:'oficinas',medios_metas:'medios_registro',contenido_metas:'contenido_registro',frecuencia_revision:'frecuencia',necesidad:'necesidad_principal',temas_prioritarios:'temas',apoyos_requeridos:'apoyos',modalidad:'modalidades',plazo_inicio:'plazos'};
-CRIT.forEach(c=>FIELD_LIST[c[0]]='semaforo');
-const MULTI=new Set(['oficinas_existentes','medios_metas','contenido_metas','temas_prioritarios','apoyos_requeridos']);
-const TEXT_FIELDS=['fecha','inicio','fin','_submission_time','informante','cargo','anio_aprobacion','ejemplo_registro','otro_medio','otro_tema','otro_apoyo','accion_prioritaria','responsable_propuesto','observaciones'];
-const KNOWN=new Set([...Object.keys(FIELD_LIST),...TEXT_FIELDS]);
-const RESERVED=['accion_prioritaria','responsable_propuesto','observaciones'];
-/* Encabezados en etiquetas (exportación Kobo "labels") → nombre XML */
-const LABEL_KEYS={
- 'Municipio':'municipio','Fecha':'fecha','Fecha de la entrevista':'fecha','Nombre de quien responde':'informante','Informante':'informante','Cargo':'cargo',
- '¿Conoce el año de aprobación de la versión del PDM-OT que utilizan?':'conoce_anio','Año de aprobación':'anio_aprobacion',
- '¿Actualmente están actualizando el PDM-OT?':'en_actualizacion','¿Qué oficinas o unidades existen actualmente en la municipalidad?':'oficinas_existentes',
- '¿Dónde registran las metas del PDM-OT y sus avances?':'medios_metas','Especifique otro medio de registro':'otro_medio',
- '¿Qué información contiene ese registro?':'contenido_metas','¿Con qué frecuencia revisan los avances del PDM-OT?':'frecuencia_revision',
- 'Mencione el nombre del documento o un ejemplo del registro de metas':'ejemplo_registro',
- '¿Qué necesita principalmente su municipio respecto al PDM-OT?':'necesidad','¿En qué necesita trabajar primero?':'temas_prioritarios','Especifique otro tema prioritario':'otro_tema',
- '¿Qué apoyo sería más útil para avanzar?':'apoyos_requeridos','Especifique otro apoyo':'otro_apoyo','¿Cómo preferirían recibir el acompañamiento?':'modalidad',
- '¿Qué acción considera prioritario iniciar?':'accion_prioritaria','¿Qué oficina o persona podría coordinarla?':'responsable_propuesto',
- '¿En qué plazo podría iniciarse?':'plazo_inicio','Observaciones adicionales':'observaciones','Observaciones':'observaciones'
-};
-CRIT.forEach(c=>{LABEL_KEYS[c[1]]=c[0];LABEL_KEYS[c[2]]=c[0];LABEL_KEYS[c[3]]=c[0];});
-/* Respaldo por palabras clave si cambia levemente el texto de la pregunta */
-const LABEL_HINTS=[[/datos del plan/,'datos_actuales'],[/problemas y prioridades respond/,'prioridades'],[/reducir (los )?riesgos/,'gestion_riesgo'],[/metas (cuentan con|tienen) indicadores/,'metas_medibles'],[/registro organizado/,'registro_metas'],[/(elaborar|revisar).*pei/,'uso_planificacion'],[/priorizar proyectos/,'uso_inversion'],[/orientaciones de uso del suelo/,'uso_territorio'],[/revisan periodicamente/,'seguimiento']];
 const TILE={san_juan_ermita:[1,0],jocotan:[2,0],camotan:[3,0],san_jose_la_arada:[0,1],chiquimula:[1,1],san_jacinto:[2,1],olopa:[3,1],ipala:[0,2],quezaltepeque:[2,2],esquipulas:[3,2],concepcion_las_minas:[2,3]};
-const MUNIS=Object.keys(SCHEMA.municipios);
 
-/* =====================================================================
+/* =========================================================
    2. Utilidades
-   ===================================================================== */
+   ========================================================= */
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const norm=v=>String(v??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const NF=new Intl.NumberFormat('es-GT');
-const pct=(a,b)=>b?Math.round(a/b*100):0;
 const pl=(n,s,p)=>n===1?s:p;
-const mname=k=>SCHEMA.municipios[k]||k;
-const lc=s=>{s=String(s||'');return /^[A-ZÁÉÍÓÚÑ]{2}/.test(s)?s:s.charAt(0).toLowerCase()+s.slice(1);};
-const lbl=(list,k)=>(SHORT[list]&&SHORT[list][k])||(SCHEMA[list]&&SCHEMA[list][k])||k;
-const lblFull=(list,k)=>(SCHEMA[list]&&SCHEMA[list][k])||k;
-const CUR_YEAR=new Date().getFullYear();
-const LABEL_NORM=new Map();
-for(const [l,k] of Object.entries(LABEL_KEYS))LABEL_NORM.set(norm(l),k);
-for(const k of KNOWN)if(!LABEL_NORM.has(norm(k)))LABEL_NORM.set(norm(k),k);
-function fmtDate(v,withTime){const t=toTime(v);if(!t)return '—';const o=withTime?{dateStyle:'medium',timeStyle:'short'}:{dateStyle:'medium'};try{return new Intl.DateTimeFormat('es-GT',{...o,timeZone:'America/Guatemala'}).format(new Date(t));}catch(e){return new Date(t).toLocaleString('es-GT');}}
-function toTime(v){if(v==null||v==='')return 0;if(v instanceof Date)return v.getTime()||0;if(typeof v==='number'){if(v>1e11)return v;if(v>20000&&v<80000)return Math.round((v-25569)*864e5);return 0;}const t=Date.parse(String(v));return Number.isFinite(t)?t:0;}
-function recTime(r){for(const k of ['_submission_time','fin','fecha','inicio']){const t=toTime(r[k]);if(t)return t;}return 0;}
-
-/* =====================================================================
-   3. Normalización (prepare)
-   ===================================================================== */
-function codeExact(v,list){const n=norm(v);if(!n)return '';for(const [k,l] of Object.entries(SCHEMA[list]||{}))if(norm(k)===n||norm(l)===n)return k;return '';}
-function code(v,list){
-  if(v==null||String(v).trim()==='')return '';
-  const ex=codeExact(v,list);if(ex)return ex;
-  const n=norm(v);
-  if(list==='semaforo'){if(n.startsWith('sin informacion')||n==='no sabe'||n==='sin info')return 'sin_informacion';for(const c of ['verde','amarillo','rojo'])if(n===c||n.startsWith(c+' '))return c;if(n.startsWith('adecuado'))return 'verde';if(n.startsWith('parcial'))return 'amarillo';if(n.startsWith('pendiente'))return 'rojo';}
-  if(list==='si_no_ns'){if(n==='si'||n==='yes'||n==='true'||n==='1')return 'si';if(n==='no'||n==='false'||n==='0')return 'no';}
-  if(list==='municipios'){for(const [k,l] of Object.entries(SCHEMA.municipios))if(n.includes(norm(l)))return k;}
-  return String(v).trim();
-}
-function codes(v,list){
-  if(v==null||v==='')return [];
-  if(Array.isArray(v))return [...new Set(v.map(x=>code(x,list)).filter(Boolean))];
-  const raw=String(v).trim();if(!raw)return [];
-  const cat=SCHEMA[list]||{};
-  const ex=codeExact(raw,list);if(ex)return [ex];
-  const toks=raw.split(/[\s,;|]+/).filter(Boolean);
-  if(toks.length&&toks.every(t=>cat[t]))return order([...new Set(toks)],list);
-  // Etiquetas concatenadas: búsqueda de la etiqueta más larga primero
-  let text=' '+norm(raw)+' ';const found=[];
-  const entries=Object.entries(cat).map(([k,l])=>[k,norm(l)]).sort((a,b)=>b[1].length-a[1].length);
-  for(const [k,nl] of entries){if(nl&&text.includes(' '+nl+' ')){found.push(k);text=text.split(' '+nl+' ').join(' # ');}}
-  for(const [k] of entries){if(text.includes(' '+norm(k)+' ')&&!found.includes(k)){found.push(k);text=text.split(' '+norm(k)+' ').join(' # ');}}
-  return order(found,list);
-}
-function order(arr,list){const keys=Object.keys(SCHEMA[list]||{});return arr.slice().sort((a,b)=>keys.indexOf(a)-keys.indexOf(b));}
-function truthy(v){if(v===true||v===1)return true;const n=norm(v);return n==='1'||n==='true'||n==='si'||n==='verdadero';}
-function resolveKey(k){
-  const n=norm(k);if(!n)return null;
-  if(LABEL_NORM.has(n))return LABEL_NORM.get(n);
-  const last=String(k).split('/').pop().trim();
-  if(KNOWN.has(last))return last;
-  {const nl=norm(last);if(/^oficinas?( |$)/.test(nl)&&!/otr|especif/.test(nl))return 'oficinas_existentes';if(/oficinas o unidades/.test(n))return 'oficinas_existentes';}
-  if(String(k).includes('¿')&&!String(k).includes('/')){for(const [re,key] of LABEL_HINTS)if(re.test(n))return key;}
-  return null;
-}
-function colInfo(k){
-  const s=String(k);
-  // columnas binarias pregunta/opción (0/1); la opción puede contener "/"
-  for(let i=s.indexOf('/');i>0;i=s.indexOf('/',i+1)){
-    const f=resolveKey(s.slice(0,i));
-    if(f&&MULTI.has(f)){const opt=codeExact(s.slice(i+1),FIELD_LIST[f]);if(opt)return {type:'bin',field:f,opt};}
-  }
-  const f=resolveKey(s);
-  return f?{type:'field',field:f}:null;
-}
-function prepare(raw){
-  raw=Array.isArray(raw)?raw:[];
-  const cols=new Map();
-  for(const r of raw)for(const k of Object.keys(r||{}))if(!cols.has(k))cols.set(k,colInfo(k));
-  const seen=new Set([...cols.values()].filter(Boolean).map(c=>c.field));
-  const out=[];let omitted=0;
-  raw.forEach((r,i)=>{
-    const item={_row:i},bin={};
-    for(const [k,v] of Object.entries(r||{})){
-      const c=cols.get(k);if(!c)continue;
-      if(c.type==='bin'){if(v===''||v==null)continue;(bin[c.field]=bin[c.field]||[]);if(truthy(v))bin[c.field].push(c.opt);}
-      else if(item[c.field]==null||item[c.field]===''){item[c.field]=v;}
-    }
-    for(const [f,list] of Object.entries(FIELD_LIST)){
-      if(MULTI.has(f)){const txt=codes(item[f],list);item[f]=txt.length?txt:(bin[f]?order([...new Set(bin[f])],list):[]);}
-      else item[f]=code(item[f],list);
-    }
-    const y=parseInt(String(item.anio_aprobacion??'').replace(/\D/g,'').slice(0,4),10);
-    item.anio_aprobacion=(y>=1980&&y<=CUR_YEAR+1)?y:null;
-    for(const k of TEXT_FIELDS)if(item[k] instanceof Date)item[k]=item[k].toISOString();
-    if(!SCHEMA.municipios[item.municipio]){omitted++;return;}
-    item._t=recTime(item);
-    out.push(item);
-  });
-  return {out,omitted,seen:[...seen],missing:CRIT.map(c=>c[0]).filter(k=>!seen.has(k))};
-}
-
-/* =====================================================================
-   4. Estado y cálculos
-   ===================================================================== */
-const S={seen:new Set(),all:[],latest:[],dups:[],source:null,publicMode:false,updatedAt:'',omitted:0,missing:[],fileName:'',filter:'',geo:null,sort:{key:'idx',dir:'desc'},q:''};
-function dedupe(rs){
-  const m=new Map(),count={};
-  for(const r of rs){count[r.municipio]=(count[r.municipio]||0)+1;const o=m.get(r.municipio);if(!o||r._t>o._t||(r._t===o._t&&r._row>o._row))m.set(r.municipio,r);}
-  S.dups=Object.entries(count).filter(([,n])=>n>1).map(([k,n])=>({m:k,n}));
-  return MUNIS.filter(k=>m.has(k)).map(k=>m.get(k));
-}
-function scoreOf(r){
-  let sum=0,n=0,sin=0,c={verde:0,amarillo:0,rojo:0,sin_informacion:0,blank:0};
-  for(const [k] of CRIT){const v=r[k];if(v==='verde'){sum+=2;n++;}else if(v==='amarillo'){sum+=1;n++;}else if(v==='rojo'){n++;}
-    if(c[v]!=null)c[v]++;else c.blank++;if(v==='sin_informacion')sin++;}
-  return {idx:n?Math.round(sum/(2*n)*100):null,raw:n?sum/(2*n)*100:null,valid:n,sin,c};
-}
-function critIndex(rs,k){let sum=0,n=0;const c={verde:0,amarillo:0,rojo:0,sin_informacion:0};for(const r of rs){const v=r[k];if(c[v]!=null)c[v]++;if(v==='verde'){sum+=2;n++;}else if(v==='amarillo'){sum+=1;n++;}else if(v==='rojo')n++;}return {idx:n?Math.round(sum/(2*n)*100):null,raw:n?sum/(2*n)*100:null,c,n};}
-function deptIndex(rs){let sum=0,n=0;for(const r of rs)for(const [k] of CRIT){const v=r[k];if(v==='verde'){sum+=2;n++;}else if(v==='amarillo'){sum+=1;n++;}else if(v==='rojo')n++;}return n?Math.round(sum/(2*n)*100):null;}
-function band(i){if(i==null)return {k:'nr',l:'Sin respuesta',c:'--nr'};if(i<40)return {k:'rojo',l:'Bajo',c:'--r'};if(i<70)return {k:'amarillo',l:'Medio',c:'--a'};return {k:'verde',l:'Alto',c:'--v'};}
-function counts(rs,key){const m={};for(const r of rs){const vals=Array.isArray(r[key])?r[key]:(r[key]?[r[key]]:[]);for(const v of vals)m[v]=(m[v]||0)+1;}return m;}
-function age(r){return r.anio_aprobacion?CUR_YEAR-r.anio_aprobacion:null;}
-function noRegistry(r){return (r.medios_metas||[]).includes('ninguno');}
-function gapOf(r){return noRegistry(r)||['no_revisan','sin_periodicidad'].includes(r.frecuencia_revision);}
-function reservedVal(r,k){if(S.publicMode)return '<span class="reserved">Dato reservado</span>';const v=r[k];return v?esc(v):'<span class="reserved">—</span>';}
-
-/* =====================================================================
-   5. Gráficos (ECharts)
-   ===================================================================== */
-const charts={};
-function baseOpt(){return {animationDuration:650,animationEasing:'cubicOut',textStyle:{fontFamily:'Inter,"Source Sans 3",system-ui,sans-serif',color:cssv('--ink2')},
-  tooltip:{confine:true,backgroundColor:cssv('--card'),borderColor:cssv('--line'),textStyle:{color:cssv('--ink'),fontSize:13},extraCssText:'border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);'}};}
-function ec(id,opt,h){
-  const el=$(id);if(!el)return null;
-  if(h)el.style.height=h+'px';
-  if(!window.echarts){el.innerHTML='<p class="empty">No se pudo cargar la librería de gráficos (revise la conexión a internet).</p>';return null;}
-  let c=charts[id];
-  if(!c||c.isDisposed()){el.innerHTML='';c=echarts.init(el,null,{renderer:'svg'});charts[id]=c;}
-  c.setOption(Object.assign(baseOpt(),opt),true);c.resize();
-  return c;
-}
-function emptyChart(id,msg){if(charts[id]){charts[id].dispose();delete charts[id];}const el=$(id);el.style.height='auto';el.innerHTML=`<p class="empty">${esc(msg||'Sin datos para mostrar.')}</p>`;}
-function labelWidth(id){const w=$(id).clientWidth||320;return Math.max(110,Math.min(210,Math.round(w*0.42)));}
-/* barras horizontales de conteo */
-function hbar(id,items,o={}){
-  if(!items.length)return emptyChart(id,o.empty||'Sin respuestas para esta pregunta.');
-  const total=o.total||0,brand=cssv('--brand'),lw=labelWidth(id);
-  const h=Math.max(150,items.length*38+(o.markAvg!=null?62:42));
-  const c=ec(id,{
-    grid:{left:8,right:o.right||64,top:o.markAvg!=null?28:8,bottom:8,containLabel:true},
-    tooltip:{trigger:'item',formatter:p=>{const it=items[p.dataIndex];return `<b>${esc(it.full||it.name)}</b><br>${it.tip||(o.unit==='idx'?'Índice '+it.value:`${it.value} ${pl(it.value,'municipio','municipios')}${total?' de '+total:''}`)}`;}},
-    xAxis:{type:'value',max:o.max||(v=>Math.max(1,v.max)),minInterval:1,splitLine:{lineStyle:{color:cssv('--line')}},axisLabel:{color:cssv('--muted')}},
-    yAxis:{type:'category',inverse:true,data:items.map(i=>i.name),axisTick:{show:false},axisLine:{lineStyle:{color:cssv('--line')}},axisLabel:{color:cssv('--ink2'),fontSize:12.5,width:lw,overflow:'break',lineHeight:15}},
-    series:[{type:'bar',barMaxWidth:20,barMinHeight:items.some(i=>i.value===0)?0:2,data:items.map(i=>({value:i.value,itemStyle:{color:i.color||brand,borderRadius:[0,5,5,0],opacity:i.dim?.35:1}})),
-      label:{show:true,position:'right',color:cssv('--ink'),fontWeight:700,fontSize:12.5,formatter:p=>o.unit==='idx'?p.value:(total?`${p.value} / ${total}`:p.value)},
-      markLine:o.markAvg!=null?{symbol:'none',silent:true,lineStyle:{color:cssv('--accent'),type:'dashed',width:2},label:{formatter:`Promedio ${o.markAvg}`,color:cssv('--accent'),fontWeight:700,position:'start'},data:[{xAxis:o.markAvg}]}:undefined}]
-  },h);
-  if(c){c.off('click');if(o.onClick)c.on('click',p=>o.onClick(items[p.dataIndex]));}
-}
-function donut(id,items,centerTop,centerSub,h){
-  const data=items.filter(i=>i.value>0);
-  if(!data.length)return emptyChart(id,'Sin respuestas para esta pregunta.');
-  const narrow=($(id).clientWidth||300)<340;
-  ec(id,{
-    tooltip:{trigger:'item',formatter:p=>`<b>${esc(p.data.full||p.name)}</b><br>${p.value} ${pl(p.value,'municipio','municipios')} · ${p.percent} %`},
-    legend:{bottom:0,left:'center',icon:'circle',itemWidth:10,itemHeight:10,textStyle:{color:cssv('--ink2'),fontSize:12.5},formatter:n=>{const d=data.find(x=>x.name===n);return `${n}  ${d?d.value:''}`;}},
-    title:{text:centerTop,subtext:centerSub,left:'center',top:narrow?'31%':'33%',textStyle:{fontSize:26,fontWeight:800,color:cssv('--ink')},subtextStyle:{fontSize:12,color:cssv('--muted')},itemGap:2},
-    series:[{type:'pie',radius:['48%','70%'],center:['50%','42%'],avoidLabelOverlap:true,padAngle:2,itemStyle:{borderRadius:6,borderColor:cssv('--card'),borderWidth:2},
-      label:{show:false},emphasis:{scale:true,scaleSize:5},data:data.map(i=>({name:i.name,value:i.value,full:i.full,itemStyle:{color:i.color}}))}]
-  },h||280);
-}
-
-/* =====================================================================
-   6. Render
-   ===================================================================== */
-const ICON={
- cover:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
- gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 18 4-6"/></svg>',
- light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="7" y="2.5" width="10" height="19" rx="3"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="17" r="1.6" fill="currentColor"/></svg>',
- refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
- list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1 1 2-2M3.5 12h3M3.5 18h3"/></svg>',
- clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const lc=s=>s.charAt(0).toLowerCase()+s.slice(1);
+const listY=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' y '+a.at(-1);
+const names=ms=>esc(listY(ms.map(m=>MUN[m])));
+const fmtD=iso=>{if(!iso)return '—';const d=new Date(iso.length===10?iso+'T12:00:00':iso);return new Intl.DateTimeFormat('es-GT',{day:'numeric',month:'long',year:'numeric'}).format(d);};
+const I={
+ a:'<svg class="i" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
+ b:'<svg class="i" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+ c:'<svg class="i" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5M14 20c0-2.2 1.4-4 3.5-4S21 17.8 21 20"/></svg>',
+ d:'<svg class="i" viewBox="0 0 24 24"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+ doc:'<svg class="i" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>',
+ plan:'<svg class="i" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 13h4M7 17h7"/></svg>',
+ shield:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
+ target:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>',
+ check:'<svg class="i" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></svg>',
+ half:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4v16"/></svg>',
+ x:'<svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+ q:'<svg class="i" viewBox="0 0 24 24"><path d="M9.2 9a3 3 0 1 1 4.3 2.7c-.9.4-1.5 1.2-1.5 2.2v.6M12 18v.5"/></svg>',
+ eye:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/></svg>',
+ book:'<svg class="i" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></svg>',
+ bulb:'<svg class="i" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
+ info:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+ print:'<svg class="i" viewBox="0 0 24 24"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>',
+ prev:'<svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>',
+ next:'<svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+ chev:'<svg class="i chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>',
+ dash:'<svg class="i" viewBox="0 0 24 24"><path d="M6 12h12"/></svg>',
+ cal:'<svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+ building:'<svg class="i" viewBox="0 0 24 24"><path d="M4 21V5l8-3 8 3v16"/><path d="M9 21v-5h6v5M8 9h2M14 9h2M8 13h2M14 13h2"/></svg>',
+ users:'<svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.5c1.8.7 3 2.6 3 5.5"/></svg>'
 };
-const KHELP={'Cobertura':'Municipios que ya enviaron el diagnóstico, de los 11 del departamento.','Estado de respuesta':'Indica si el municipio ya envió el diagnóstico.','Índice de uso':'0 = todo en rojo · 100 = todo en verde. Verde vale 2, amarillo 1 y rojo 0; «sin información» no cuenta.','Valoraciones':'Total de criterios valorados (municipios × 9 criterios) y cómo se reparten por color.','Actualizando el plan':'Respondieron «Sí» a: ¿actualmente están actualizando el PDM-OT?','Sin registro de metas':'Respondieron que no existe un registro de las metas del plan y sus avances.','Registro de metas':'Dónde registran las metas del plan y cada cuánto revisan los avances.','Antigüedad del plan':'Años desde la aprobación del plan. Con 5 años o más conviene revisar su actualización.'};
-function kpi(o){return `<div class="kpi" style="--kc:var(${o.c||'--brand'});--kbg:${o.bg||'var(--brand-soft)'}"><div class="k-top"><span class="k-ico">${o.icon}</span>${esc(o.t)}</div>${o.body}${KHELP[o.t]?`<div class="k-help">${KHELP[o.t]}</div>`:''}</div>`;}
-function ring(n,tot){const r=27,C=2*Math.PI*r,p=tot?n/tot:0;return `<svg class="ring" viewBox="0 0 66 66" role="img" aria-label="${n} de ${tot}"><circle cx="33" cy="33" r="${r}" fill="none" stroke="var(--track)" stroke-width="8"/><circle cx="33" cy="33" r="${r}" fill="none" stroke="var(--brand)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(C*p).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 33 33)"/><text x="33" y="38" text-anchor="middle" font-size="15" font-weight="800" fill="var(--ink)">${pct(n,tot)}%</text></svg>`;}
+const SI={verde:I.check,amarillo:I.half,rojo:I.x,sin_informacion:I.q};
+const txt=(r,campo,clave)=>(r.textos_pendientes||[]).includes(clave)?'<span class="reserved">Respuesta en revisión antes de publicarse</span>':esc(r[campo]||'—');
+const pill=v=>ST[v]?`<span class="pill p-${v}" title="${esc(ST[v].f)}">${SI[v]}${ST[v].l}</span>`:'<span class="pill p-sin_informacion">—</span>';
+function dist(k,rs=RESP){const c={verde:[],amarillo:[],rojo:[],sin_informacion:[]};for(const m of rs){const v=R[m][k];if(c[v])c[v].push(m);}return c;}
+function bar(c,total,sm){const n=k=>Array.isArray(c[k])?c[k].length:c[k];return `<div class="bar ${sm?'sm':''}" role="img" aria-label="${SK.map(k=>ST[k].l+' '+n(k)).join(', ')} de ${total}">${SK.map(k=>n(k)?`<span class="${ST[k].cls} ${k==='amarillo'?'ka':k==='sin_informacion'?'ks':''}" style="flex:${n(k)}" title="${ST[k].l}: ${n(k)} de ${total}">${sm?'':(pct(n(k),total)>=9?n(k):'')}</span>`:'').join('')}</div>`;}
+const keys=()=>`<div class="keys">${SK.map(k=>`<span><i class="dot ${ST[k].cls}"></i>${ST[k].l}</span>`).join('')}</div>`;
+const mchip=(m,v)=>`<button class="mc" data-m="${m}" title="Ver ficha de ${esc(MUN[m])}">${v?`<i class="dot" style="background:${ST[v].c}"></i>`:''}${esc(MUN[m])}</button>`;
+function byState(k){const c=dist(k);return `<div class="byst">${SK.map(s=>c[s].length?`<div><span class="lab"><i class="dot ${ST[s].cls}"></i>${ST[s].l} · ${c[s].length}</span><div class="mchips">${c[s].map(m=>mchip(m,s)).join('')}</div></div>`:'').join('')}</div>`;}
+const cnt=(key,rs=RESP)=>{const c={};for(const m of rs){const v=R[m][key];for(const x of (Array.isArray(v)?v:(v?[v]:[])))(c[x]=c[x]||[]).push(m);}return c;};
+const sortE=o=>Object.entries(o).sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0]));
+const age=r=>r.anio_aprobacion?REF_YEAR-r.anio_aprobacion:null;
+const hasReg=r=>(r.medios_metas||[]).some(k=>!['ninguno','no_sabe'].includes(k));
+const noReg=r=>(r.medios_metas||[]).includes('ninguno');
+const asksTema=(m,c)=>(R[m].temas||[]).some(t=>c.tema.includes(t));
+const strip=m=>`<div class="strip" aria-hidden="true">${CRIT.map(c=>`<i style="background:${R[m]?ST[R[m][c.k]].c:'var(--line)'}" title="${c.n}. ${esc(c.s)}: ${R[m]?ST[R[m][c.k]].l:'Sin respuesta'}"></i>`).join('')}</div>`;
+const sec=(ic,color,t,s)=>`<div class="sec-h"><span class="ic" style="background:${color}">${I[ic]}</span><div><h3>${t}</h3>${s?`<p>${s}</p>`:''}</div></div>`;
 
+/* Respuestas por confirmar: seis reglas aprobadas que comparan un semáforo con su pregunta complementaria.
+   Nunca modifican la respuesta original ni la califican como error. */
+const PERIODICA=['trimestral','cuatrimestral','semestral','anual'];
+function flags(m){const r=R[m],f=[];if(!r)return f;const med=r.medios_metas||[],rm=r.registro_metas,sg=r.seguimiento,fr=r.frecuencia_revision;
+  const regTxt=`Valoró «Registro organizado de metas y avances» como ${ST[rm]?ST[rm].l.toLowerCase():'—'}`,segTxt=`Valoró «Seguimiento periódico para decidir» como ${ST[sg]?ST[sg].l.toLowerCase():'—'}`;
+  const medTxt=`En «¿Dónde registran las metas del PDM-OT y sus avances?» respondió «${med.map(k=>L.medios[k]).join('; ')}»`;
+  const frTxt=`En «¿Con qué frecuencia revisan los avances del PDM-OT?» respondió «${L.frecuencia[fr]||'—'}»`;
+  if(['verde','amarillo'].includes(rm)&&med.includes('ninguno'))f.push({r:'A',k:'registro_metas',t:`${regTxt}. ${medTxt}.`});
+  if(['verde','amarillo'].includes(rm)&&med.includes('no_sabe'))f.push({r:'B',k:'registro_metas',t:`${regTxt}. ${medTxt}.`});
+  if(rm==='rojo'&&hasReg(r))f.push({r:'C',k:'registro_metas',t:`${regTxt}. ${medTxt}.`});
+  if(rm==='sin_informacion'&&hasReg(r))f.push({r:'D',k:'registro_metas',t:`${regTxt}. ${medTxt}.`});
+  if(['verde','amarillo'].includes(sg)&&fr==='no_revisan')f.push({r:'E',k:'seguimiento',t:`${segTxt}. ${frTxt}.`});
+  if(sg==='rojo'&&PERIODICA.includes(fr))f.push({r:'F',k:'seguimiento',t:`${segTxt}. ${frTxt}.`});
+  return f;}
+const conFlag=k=>RESP.filter(m=>flags(m).some(x=>x.k===k));
+
+/* =========================================================
+   3. Navegación
+   ========================================================= */
+const VIEWS=[
+ {k:'estamos',t:'¿Cómo estamos?',s:'Panorama de los 11 municipios',ic:'a'},
+ {k:'mejorar',t:'¿Qué debemos mejorar?',s:'Los 9 criterios de la boleta',ic:'b'},
+ {k:'apoyo',t:'¿Qué apoyo necesitamos?',s:'Necesidades, temas y plazos',ic:'c'},
+ {k:'municipio',t:'¿Cómo está mi municipio?',s:'Ficha de cada municipio',ic:'d'}
+];
+const S={view:'estamos',m:''};
+function parseHash(){const h=decodeURIComponent(location.hash.replace('#','')).split('/');if(VIEWS.some(v=>v.k===h[0]))S.view=h[0];S.m=h[0]==='municipio'&&MUN[h[1]]?h[1]:(h[0]==='municipio'?'':S.m);return h[1];}
+function go(view,m,anchor){S.view=view;if(m!==undefined)S.m=m;const h='#'+view+(view==='municipio'&&S.m?'/'+S.m:'');history.replaceState(null,'',h);render();if(anchor){const el=$(anchor);if(el){el.scrollIntoView({block:'start'});return;}}window.scrollTo({top:0});}
 function render(){
-  const all=S.latest,f=S.filter,sel=f?all.filter(r=>r.municipio===f):all;
-  const rec=f?sel[0]:null;
-  const scores=new Map(all.map(r=>[r.municipio,scoreOf(r)]));
-  const dIdx=deptIndex(all),selIdx=deptIndex(sel);
-  renderHeader();renderKPIs(all,sel,rec,scores,dIdx,selIdx);renderMap(all,scores,dIdx);renderMatrix(all,scores,dIdx);
-  renderStack(sel);renderRank(all,scores,dIdx);renderPlan(all,sel);renderSeg(sel);renderDemand(sel);
-  renderFindings(all,sel,rec,scores,dIdx);renderFicha(rec,scores,dIdx);renderTable(sel,scores);renderQuality();
+  $('nav').innerHTML=VIEWS.map(v=>`<button class="qbtn" data-view="${v.k}" ${S.view===v.k?'aria-current="page"':''}><span class="qi">${I[v.ic]}</span><span><b>${v.t}</b><small>${v.s}</small></span></button>`).join('');
+  if(!D||!N){$('view').innerHTML=`<div class="vacia">${D?'Sin respuestas publicadas todavía.':ESTADO.tipo==='cargando'?'':'Los resultados aparecerán cuando se puedan leer los datos publicados.'}</div>`;return;}
+  $('view').innerHTML=`<div class="fade">${({estamos:vEstamos,mejorar:vMejorar,apoyo:vApoyo,municipio:vMunicipio})[S.view]()}</div>`;
 }
-function renderHeader(){
-  const tag=$('srcTag'),n=S.all.length;
-  tag.className='tag '+(S.source==='kobo'?'':S.source==='demo'?'demo':S.source==='file'?'local':'none');
-  tag.querySelector('span').textContent=S.source==='kobo'?`Kobo · ${n} ${pl(n,'respuesta','respuestas')}`:S.source==='demo'?'Demostración · datos ficticios':S.source==='file'?`Archivo local · ${n} ${pl(n,'respuesta','respuestas')}`:'Sin datos cargados';
-  const sync=S.source==='kobo'?(S.updatedAt?'Última sincronización: '+fmtDate(S.updatedAt,true):'Sincronización sin fecha'):S.source==='file'?'Archivo: '+S.fileName:S.source==='demo'?'Vista de ejemplo':'Sin sincronizar';
-  $('syncTxt').textContent=sync;$('footSync').textContent=sync;
-  const b=$('banner');
-  if(S.source==='demo'){b.className='banner demo show';b.innerHTML='<b>DEMOSTRACIÓN:</b> estos datos son ficticios y solo ilustran el visor. ';}
-  else if(S.source==='file'){b.className='banner show';b.innerHTML=`<b>Archivo local:</b> ${esc(S.fileName)}. Se muestran todos los campos porque los datos no salen de este equipo. La recarga automática de Kobo queda en pausa hasta pulsar «Actualizar vista».`;}
-  else if(!S.source){b.className='banner show';b.innerHTML=location.protocol.startsWith('http')?'Aún no hay respuestas disponibles desde Kobo. Los municipios sin registro se muestran como «Sin respuesta».':'Esta copia se abrió desde el equipo: los datos de Kobo se cargan automáticamente al publicarse en GitHub Pages.';}
-  else{b.className='banner';b.innerHTML='';}
+
+/* =========================================================
+   4. A · ¿Cómo estamos?
+   ========================================================= */
+function vEstamos(){
+  const tot={verde:0,amarillo:0,rojo:0,sin_informacion:0};for(const m of RESP)for(const c of CRIT)tot[R[m][c.k]]++;const T=N*9;
+  const fechas=cnt('fecha');
+  const upd=RESP.filter(m=>R[m].en_actualizacion==='si'),ages=RESP.filter(m=>age(R[m])!=null),old=ages.filter(m=>age(R[m])>=5);
+  const reg=RESP.filter(m=>hasReg(R[m]));
+  const cr=CRIT.map(c=>{const d=dist(c.k),v=d.verde.length+d.amarillo.length+d.rojo.length;return {c,d,v};});
+  const strong=cr.slice().sort((a,b)=>b.d.verde.length-a.d.verde.length||a.c.n-b.c.n).slice(0,3);
+  const weak=cr.slice().sort((a,b)=>(b.d.rojo.length+b.d.amarillo.length)-(a.d.rojo.length+a.d.amarillo.length)||b.d.rojo.length-a.d.rojo.length||a.c.n-b.c.n).slice(0,3);
+  let h=`<div class="hero"><div><h2>¿Cómo estamos?</h2><p>Lo que respondieron las ${N} Direcciones Municipales de Planificación sobre el uso de su PDM-OT. Son valoraciones declaradas por cada DMP en la boleta de Kobo, no una evaluación.</p></div></div>`;
+  h+=`<div class="stats">
+   <div class="card"><div class="ic" style="background:var(--blue-s);color:var(--blue)">${I.users}</div><div class="stat"><span class="n">${N}<small> de 11</small></span><span class="t">municipios respondieron${MISS.length?` · faltan ${names(MISS)}`:''}</span><span class="note">${Object.entries(fechas).sort().map(([f,ms])=>`${ms.length} ${pl(ms.length,'respuesta','respuestas')} del ${fmtD(f)}`).join(' y ')}</span></div></div>
+   <div class="card"><div class="ic" style="background:var(--v-s);color:var(--v)">${I.check}</div><div class="stat"><span class="n">${tot.verde}<small> de ${T}</small></span><span class="t">valoraciones en <b>verde</b> (adecuado)</span><span class="note">${tot.amarillo} en amarillo, ${tot.rojo} en rojo y ${tot.sin_informacion} sin información</span></div></div>
+   <div class="card"><div class="ic" style="background:var(--t-cont-s);color:var(--t-cont)">${I.cal}</div><div class="stat"><span class="n">${old.length}<small> de ${ages.length}</small></span><span class="t">planes con 5 años o más</span><span class="note">Entre los que conocen su año de aprobación · ${upd.length} ${pl(upd.length,'municipio lo está','municipios lo están')} actualizando</span></div></div>
+   <div class="card"><div class="ic" style="background:var(--t-seg-s);color:var(--t-seg)">${I.target}</div><div class="stat"><span class="n">${reg.length}<small> de ${N}</small></span><span class="t">tienen un registro de metas</span><span class="note">${RESP.filter(m=>noReg(R[m])).length} indican que no existe registro y ${RESP.filter(m=>(R[m].medios_metas||[]).includes('no_sabe')).length} no saben</span></div></div>
+  </div>`;
+  h+=`<div class="card" style="margin-top:16px"><header><h3>Las ${T} valoraciones de la boleta</h3><p class="sub">${N} municipios × 9 criterios. Cada DMP marcó verde, amarillo, rojo o «sin información» en cada criterio.</p></header>${bar(tot,T)}${keys()}<p class="lead" style="margin-top:14px">La valoración más frecuente es <b>parcial</b>: ${tot.amarillo} de ${T} (${pct(tot.amarillo,T)} %). En la boleta, «parcial» significa que el aspecto existe o se usa, pero necesita fortalecimiento.</p></div>`;
+  /* Fortalezas y aspectos a fortalecer */
+  const li=x=>`<li><span class="nm"><button data-crit="${x.c.k}">${x.c.n}. ${esc(x.c.s)}</button></span><span class="ct">${x.d.verde.length} adecuado · ${x.d.amarillo.length} parcial · ${x.d.rojo.length} pendiente${x.d.sin_informacion.length?` · ${x.d.sin_informacion.length} sin información`:''}</span>${bar(Object.fromEntries(SK.map(k=>[k,x.d[k].length])),N,true)}</li>`;
+  h+=`<div class="lists" style="margin-top:16px"><div class="card"><header><h3 style="display:flex;gap:8px;align-items:center"><span style="color:var(--v)">${I.check}</span>Lo que más se declara como adecuado</h3><p class="sub">Criterios con más municipios en verde</p></header><ul class="rank-free">${strong.map(li).join('')}</ul></div><div class="card"><header><h3 style="display:flex;gap:8px;align-items:center"><span style="color:var(--r)">${I.half}</span>Lo que más necesita fortalecerse</h3><p class="sub">Criterios con más municipios en amarillo o rojo</p></header><ul class="rank-free">${weak.map(li).join('')}</ul></div></div>`;
+  /* Foco en gestión del riesgo */
+  const gr=dist('gestion_riesgo'),us=dist('uso_territorio');
+  const temaR=RESP.filter(m=>(R[m].temas||[]).includes('riesgo')),temaS=RESP.filter(m=>(R[m].temas||[]).includes('uso_suelo'));
+  const gird=RESP.filter(m=>(R[m].oficinas||[]).includes('gird'));
+  const nogreen=RESP.filter(m=>R[m].gestion_riesgo!=='verde'&&R[m].gestion_riesgo!=='sin_informacion');
+  const nogInv=nogreen.filter(m=>R[m].uso_inversion==='verde'),nogPlan=nogreen.filter(m=>R[m].uso_planificacion==='verde');
+  h+=`<div class="card spot" style="margin-top:16px"><span class="tagr">${I.shield}Foco: gestión del riesgo</span><h3>¿El PDM-OT orienta la reducción del riesgo?</h3><p class="sub" style="margin-bottom:14px">Criterio 3 de la boleta: «${esc(CK.gestion_riesgo.q)}»</p>
+   <div class="spotgrid"><div>${bar(Object.fromEntries(SK.map(k=>[k,gr[k].length])),N)}${byState('gestion_riesgo')}<p class="lead" style="margin-top:14px">${gr.verde.length} de ${N} ${pl(gr.verde.length,'DMP considera','DMP consideran')} que el plan orienta adecuadamente la reducción del riesgo; ${gr.amarillo.length} lo valoran como parcial${gr.rojo.length?` y ${gr.rojo.length} como pendiente`:''}.</p></div>
+   <div class="rel">
+    <div class="ri"><b>Uso del suelo (criterio 8)</b>${us.verde.length} adecuado · ${us.amarillo.length} parcial · ${us.rojo.length} pendiente · ${us.sin_informacion.length} sin información</div>
+    <div class="ri"><b>Piden trabajar «Riesgo y cambio climático»</b>${temaR.length} de ${N}${temaR.length?`: ${names(temaR)}`:''}. Uso del suelo: ${temaS.length} de ${N}.</div>
+    <div class="ri"><b>Relación con planificación e inversión</b>De ${nogreen.length} municipios con el riesgo en parcial o pendiente, ${nogPlan.length} declaran un uso adecuado del PDM-OT en el PEI-POM-POA y ${nogInv.length} en la inversión.</div>
+    <div class="ri"><b>Oficina de gestión de riesgo</b>Existe en ${gird.length} de ${N} municipalidades${N-gird.length?`; no existe en ${names(RESP.filter(m=>!gird.includes(m)))}`:''}.</div>
+   </div></div>
+   <div class="caution">${I.info}<span>Una valoración en amarillo o rojo indica que, según la DMP, el PDM-OT orienta poco la reducción del riesgo. <b>No significa que la municipalidad no realice gestión del riesgo.</b></span></div></div>`;
+  /* Municipios: esquema y planes */
+  const cells=[];for(let y=0;y<4;y++)for(let x=0;x<4;x++){const m=Object.keys(TILE).find(k=>TILE[k][0]===x&&TILE[k][1]===y);cells.push(m?`<button class="tile" data-m="${m}"><b>${esc(MUN[m])}</b>${strip(m)}</button>`:'<div class="tile ghost" aria-hidden="true"></div>');}
+  const yrs={};for(const m of RESP){const y=R[m].anio_aprobacion||'nc';(yrs[y]=yrs[y]||[]).push(m);}
+  const yrows=Object.keys(yrs).filter(y=>y!=='nc').sort().map(y=>`<div class="yrow"><span class="y">${y}<small>${REF_YEAR-y} ${pl(REF_YEAR-y,'año','años')}</small></span><div class="mchips">${yrs[y].map(m=>`<button class="mc" data-m="${m}">${R[m].en_actualizacion==='si'?`<i class="dot" style="background:var(--blue)"></i>`:''}${esc(MUN[m])}</button>`).join('')}</div></div>`).join('')+(yrs.nc?`<div class="yrow"><span class="y" style="font-size:12.5px">No conocido</span><div class="mchips">${yrs.nc.map(m=>mchip(m)).join('')}</div></div>`:'');
+  const offs=Object.keys(L.oficinas).map(k=>{const y=RESP.filter(m=>(R[m].oficinas||[]).includes(k));return `<div class="off"><span>${esc(L.oficinas[k])}</span><div class="tr"><div class="fl" style="width:${pct(y.length,N)}%"></div></div><b>${y.length} de ${N}</b></div>`;}).join('');
+  h+=`<div class="grid" style="margin-top:16px"><div class="card c7"><header><h3>Los 11 municipios de un vistazo</h3><p class="sub">Cada franja muestra los 9 criterios en el orden de la boleta (1 a 9). Pulse un municipio para ver su ficha.</p></header><div class="tiles">${cells.join('')}</div>${keys()}<p class="note" style="margin-top:8px">Esquema de ubicación aproximada para orientarse; no es cartografía ni muestra límites municipales.</p></div>
+  <div class="card c5"><header><h3>Año de aprobación del plan</h3><p class="sub">Punto azul: el municipio indica que lo está actualizando.</p></header><div class="years">${yrows}</div><h3 style="margin-top:22px">Oficinas que existen en la municipalidad</h3><p class="sub" style="margin-bottom:12px">Pregunta de selección múltiple · base ${N} municipios</p><div class="offs">${offs}</div></div></div>`;
+  h+=controlCard();
+  return h;
 }
-function renderKPIs(all,sel,rec,scores,dIdx,selIdx){
+function controlCard(){
+  const fechas=cnt('fecha');
+  return `<div class="card" style="margin-top:16px"><header><h3>Origen de los datos y notas de control</h3><p class="sub">Para quien necesite verificar la información</p></header><dl class="facts">
+   <div class="fact"><dt>Fuente</dt><dd>${esc(D.meta.fuente)}${D.updated_at?` · actualizado el ${esc(fmtFH(D.updated_at))}`:''}</dd></div>
+   <div class="fact"><dt>Registros</dt><dd>${D.meta.registros_recibidos} recibidos · ${N} municipios · ${D.meta.duplicados_descartados} duplicados · ${D.meta.registros_omitidos} omitidos</dd></div>
+   <div class="fact"><dt>Fechas del diagnóstico</dt><dd>${Object.entries(fechas).sort().map(([f,ms])=>`${fmtD(f)}: ${ms.length} ${pl(ms.length,'municipio','municipios')}`).join(' · ')}</dd></div>
+   <div class="fact"><dt>No se publican</dt><dd>${esc(D.meta.campos_excluidos.join(', '))}</dd></div>
+   <div class="fact" style="grid-column:1/-1"><dt>Respuestas abiertas</dt><dd>La acción prioritaria, la oficina que la coordinaría y el ejemplo de registro se revisaron${D.meta.textos_revisados.fecha?' el '+fmtD(D.meta.textos_revisados.fecha):''}. ${esc(D.meta.textos_revisados.criterio||'')} Las respuestas abiertas nuevas se publican después de una revisión${D.meta.textos_pendientes.length?`; hoy hay textos en revisión en ${names(D.meta.textos_pendientes.map(x=>x.municipio))}`:''}.</dd></div>
+   ${D.meta.notas_control.map(n=>`<div class="fact" style="grid-column:1/-1"><dt>Nota de control · ${esc(MUN[n.municipio])}</dt><dd>${esc(n.texto)}</dd></div>`).join('')}</dl></div>`;
+}
+
+/* =========================================================
+   5. B · ¿Qué debemos mejorar?
+   ========================================================= */
+function critCard(c){
+  const g=GK[c.g],d=dist(c.k),weak=[...d.amarillo,...d.rojo],asks=weak.filter(m=>asksTema(m,c));
+  const sig=`<ul>${SK.slice(0,3).map(s=>`<li><b style="color:${s==='amarillo'?'#8A5600':ST[s].c}">${ST[s].l}:</b> ${esc(c.sig[s])}.</li>`).join('')}<li><b style="color:#4A5666">Sin información:</b> la DMP no tenía datos para valorarlo; no es un resultado negativo.</li></ul>${c.nota?`<p style="margin-top:8px"><b>Importante:</b> ${esc(c.nota)}</p>`:''}`;
+  const fort=`<p style="font-weight:600">${esc(c.preg)}</p><p style="margin-top:10px">${weak.length} ${pl(weak.length,'municipio lo valora','municipios lo valoran')} como parcial o pendiente${weak.length?`; ${asks.length?`${asks.length} de ellos pidieron trabajar el tema «${esc(c.tema.map(t=>L.temas[t]).join('» o «'))}» (${names(asks)})`:'ninguno de ellos lo pidió como tema prioritario'}`:''}.</p><p class="valid">Pregunta orientadora para el diálogo técnico. No representa una decisión ni un compromiso municipal.</p>`;
+  return `<article class="card crit" id="c-${c.k}" style="--tc:${g.c};--tcs:${g.cs}"><div class="chd"><span class="num">${c.n}</span><div><h4>${esc(c.s)}</h4><p>${esc(c.q)}</p></div></div>
+  <div class="levels"><div class="lv l1"><div class="lt">${I.eye}Lo que respondieron</div>${bar(Object.fromEntries(SK.map(k=>[k,d[k].length])),N)}${byState(c.k)}</div>
+  <div class="lv l2"><div class="lt">${I.book}Qué significa cada color</div>${sig}</div>
+  <div class="lv l3"><div class="lt">${I.bulb}Aspectos para revisar y fortalecer</div>${fort}</div></div>${extraFor(c)}</article>`;
+}
+function extraFor(c){
+  if(c.k==='gestion_riesgo'){const g=RESP.filter(m=>(R[m].oficinas||[]).includes('gird'));const t=RESP.filter(m=>(R[m].temas||[]).includes('riesgo'));
+    return `<div class="extra"><div class="ex"><h5>Oficina de gestión de riesgo en la municipalidad</h5><div class="mini"><div class="mr"><span>Existe</span><b>${g.length} de ${N}</b></div>${N-g.length?`<div class="mr"><span>No existe</span><b>${N-g.length}</b><span class="ms">${names(RESP.filter(m=>!g.includes(m)))}</span></div>`:''}</div></div><div class="ex"><h5>Piden trabajar «Riesgo y cambio climático»</h5><div class="mini"><div class="mr"><span>Municipios</span><b>${t.length} de ${N}</b><span class="ms">${names(t)||'Ninguno'}</span></div></div></div></div>`;}
+  if(c.k==='registro_metas'){const me=cnt('medios_metas'),withR=RESP.filter(m=>hasReg(R[m])),co=cnt('contenido_metas',withR);
+    return `<div class="extra"><div class="ex"><h5>¿Dónde registran las metas? <span class="note">(selección múltiple)</span></h5><div class="mini">${sortE(me).map(([k,ms])=>`<div class="mr"><span>${esc(L.medios[k])}</span><b>${ms.length}</b><span class="ms">${names(ms)}</span></div>`).join('')}</div></div>${(()=>{const fm=conFlag('registro_metas');return fm.length?`<div class="ex"><h5>Respuestas por confirmar con la DMP</h5><p style="font-size:13px">El semáforo y la pregunta sobre dónde se registran las metas no coinciden en ${fm.length} municipios: ${names(fm)}. Ver el detalle en cada ficha.</p></div>`:'';})()}<div class="ex"><h5>¿Qué contiene el registro? <span class="note">(solo los ${withR.length} que tienen registro)</span></h5><div class="mini">${Object.keys(L.contenido).filter(k=>!['ninguno','no_sabe'].includes(k)).map(k=>{const ms=co[k]||[];return `<div class="mr"><span>${esc(L.contenido[k])}</span><b>${ms.length} de ${withR.length}</b></div>`;}).join('')}</div></div></div>`;}
+  if(c.k==='seguimiento'){const fr=cnt('frecuencia_revision');
+    const fm=conFlag('seguimiento');
+    return `<div class="extra"><div class="ex"><h5>¿Con qué frecuencia revisan los avances?</h5><div class="mini">${Object.keys(L.frecuencia).filter(k=>fr[k]).map(k=>`<div class="mr"><span>${esc(L.frecuencia[k])}</span><b>${fr[k].length}</b><span class="ms">${names(fr[k])}</span></div>`).join('')}</div></div>${fm.length?`<div class="ex"><h5>Respuestas por confirmar con la DMP</h5><p style="font-size:13px">El semáforo y la frecuencia de revisión no coinciden en ${fm.length} ${pl(fm.length,'municipio','municipios')}: ${names(fm)}. Ver el detalle en cada ficha.</p></div>`:''}</div>`;}
+  if(c.k==='datos_actuales'){const ag=RESP.filter(m=>age(R[m])!=null&&age(R[m])>=5),upd=RESP.filter(m=>R[m].en_actualizacion==='si'),nc=RESP.filter(m=>age(R[m])==null);
+    return `<div class="extra"><div class="ex"><h5>Antigüedad del plan</h5><div class="mini"><div class="mr"><span>Aprobado hace 5 años o más</span><b>${ag.length}</b><span class="ms">${names(ag)}</span></div><div class="mr"><span>Año no conocido</span><b>${nc.length}</b><span class="ms">${names(nc)||'—'}</span></div></div></div><div class="ex"><h5>¿Lo están actualizando?</h5><div class="mini"><div class="mr"><span>Sí</span><b>${upd.length}</b><span class="ms">${names(upd)}</span></div><div class="mr"><span>No</span><b>${RESP.filter(m=>R[m].en_actualizacion==='no').length}</b></div><div class="mr"><span>No sabe</span><b>${RESP.filter(m=>R[m].en_actualizacion==='no_sabe').length}</b></div></div></div></div>`;}
+  return '';
+}
+function vMejorar(){
+  let h=`<div class="hero"><div><h2>¿Qué debemos mejorar?</h2><p>Los 9 criterios de la boleta, agrupados en cuatro temas. Cada criterio se lee en tres pasos: lo que respondieron las DMP, qué significa cada color y qué aspectos conviene revisar y fortalecer en el diálogo técnico.</p></div></div>`;
+  h+=`<div class="gnav">${GROUPS.map(g=>`<a href="#g-${g.k}" data-anchor="g-${g.k}" style="color:${g.c};border-color:${g.c};background:${g.cs}">${I[g.ic]}${esc(g.n)}</a>`).join('')}</div>`;
+  for(const g of GROUPS){const cs=CRIT.filter(c=>c.g===g.k);
+    h+=`<div class="grp-h" id="g-${g.k}"><span class="ic" style="background:${g.c}">${I[g.ic]}</span><div><h3>${esc(g.n)}</h3><p>${esc(g.d)} · criterios ${cs.map(c=>c.n).join(', ')}</p></div></div><div style="display:grid;gap:16px">${cs.map(critCard).join('')}</div>`;}
+  const head=`<tr><th>Municipio</th>${CRIT.map(c=>`<th title="${esc(c.q)}" style="border-top:4px solid ${GK[c.g].c}">${c.n}. ${esc(c.s)}</th>`).join('')}</tr>`;
+  const rows=ALPHA.map(m=>`<tr><td><button class="mc" data-m="${m}" style="border:0;padding:0;background:none">${esc(MUN[m])}</button></td>${CRIT.map(c=>`<td>${R[m]?pill(R[m][c.k]):'—'}</td>`).join('')}</tr>`).join('');
+  h+=`<details class="full"><summary>${I.b}Ver todos los municipios y criterios en una tabla<span class="note" style="font-weight:500">Orden alfabético</span>${I.chev}</summary><div class="body">${keys()}<div class="tablewrap" style="margin-top:12px"><table class="mt"><thead>${head}</thead><tbody>${rows}</tbody></table></div></div></details>`;
+  return h;
+}
+
+/* =========================================================
+   6. C · ¿Qué apoyo necesitamos?
+   ========================================================= */
+function hbars(entries,total,color,lab){return `<div class="hbars">${entries.map(([k,ms])=>`<div class="hb" style="--hc:${color}"><div class="top2"><span>${esc(lab(k))}</span><b>${ms.length} de ${total}</b></div><div class="tr"><div class="fl" style="width:${pct(ms.length,total)}%"></div></div><div class="who">${ms.map(m=>`<button data-m="${m}">${esc(MUN[m])}</button>`).join(', ')}</div></div>`).join('')}</div>`;}
+function vApoyo(){
+  const ne=cnt('necesidad'),te=cnt('temas'),ap=cnt('apoyos'),mo=cnt('modalidad');
+  const selT=RESP.reduce((a,m)=>a+(R[m].temas||[]).length,0),selA=RESP.reduce((a,m)=>a+(R[m].apoyos||[]).length,0);
+  let h=`<div class="hero"><div><h2>¿Qué apoyo necesitamos?</h2><p>Lo que cada DMP pidió en la boleta: su necesidad principal, los temas en que quiere trabajar primero, el tipo de apoyo, la modalidad y el plazo para iniciar.</p></div></div>`;
+  h+=`<div class="grid"><div class="card c6"><header><h3>Necesidad principal respecto al PDM-OT</h3><p class="sub">Una respuesta por municipio · base ${N} municipios</p></header>${hbars(sortE(ne),N,'var(--blue)',k=>L.necesidad[k])}</div>
+  <div class="card c6"><header><h3>Temas en que necesitan trabajar primero</h3><p class="sub">Pregunta de selección múltiple</p></header><div class="countnote"><span class="cn"><b>${N}</b> municipios</span><span class="cn"><b>${selT}</b> temas seleccionados en total</span><span class="cn">Las barras cuentan municipios y no suman ${N}</span></div>${hbars(sortE(te),N,'var(--t-risk)',k=>L.temas[k])}</div>
+  <div class="card c6"><header><h3>Apoyo que sería más útil</h3><p class="sub">Pregunta de selección múltiple</p></header><div class="countnote"><span class="cn"><b>${N}</b> municipios</span><span class="cn"><b>${selA}</b> apoyos seleccionados en total</span></div>${hbars(sortE(ap),N,'var(--t-seg)',k=>L.apoyos[k])}</div>
+  <div class="card c6"><header><h3>Modalidad preferida</h3><p class="sub">Una respuesta por municipio · base ${N} municipios</p></header>${hbars(sortE(mo),N,'var(--t-cont)',k=>L.modalidad[k])}</div></div>`;
+  const lanes=['treinta_dias','uno_tres_meses','mas_tres_meses','por_definir'],lc2={treinta_dias:'var(--v)',uno_tres_meses:'var(--blue)',mas_tres_meses:'var(--t-seg)',por_definir:'var(--s)'};
+  h+=`<div class="card" style="margin-top:16px"><header><h3>¿Cuándo podría iniciar el acompañamiento?</h3><p class="sub">Plazo indicado por cada municipio, con su modalidad y los apoyos que pidió</p></header><div class="lanes">${lanes.map(k=>{const ms=RESP.filter(m=>R[m].plazo===k);return `<div class="lane" style="--lc:${lc2[k]}"><h4>${esc(L.plazo[k])}</h4><div class="ln">${ms.length}</div>${ms.map(m=>`<div class="m"><button data-m="${m}">${esc(MUN[m])}</button><small>${esc(L.modalidad[R[m].modalidad]||'')} · ${esc((R[m].apoyos||[]).map(a=>L.apoyos[a]).join('; '))}</small></div>`).join('')||'<div class="note">Ninguno</div>'}</div>`;}).join('')}</div></div>`;
+  /* Acciones que proponen las DMP */
+  h+=`<div class="card" style="margin-top:16px"><header><h3>Acciones que las DMP proponen iniciar</h3><p class="sub">Propuestas declaradas en el diagnóstico, con la oficina que podría coordinarlas. No son compromisos acordados.</p></header><div class="tablewrap"><table class="cross"><thead><tr><th>Municipio</th><th>Acción que propone iniciar</th><th>Oficina que podría coordinarla</th><th>Plazo indicado</th></tr></thead><tbody>${RESP.map(m=>`<tr><td><button class="mc" data-m="${m}">${esc(MUN[m])}</button></td><td>${txt(R[m],'accion_prioritaria','accion')}</td><td>${txt(R[m],'coordina','coordina')}</td><td class="note">${esc(L.plazo[R[m].plazo]||'—')}</td></tr>`).join('')}</tbody></table></div><p class="note" style="margin-top:10px">Textos con corrección ortográfica mínima, sin cambiar su significado. Se publica la oficina, no nombres ni cargos de personas.</p></div>`;
+  /* Relación criterio-tema */
+  const rows=CRIT.map(c=>{const d=dist(c.k),weak=[...d.amarillo,...d.rojo],asks=RESP.filter(m=>asksTema(m,c)),both=weak.filter(m=>asks.includes(m)),notAsk=d.rojo.filter(m=>!asks.includes(m));return {c,weak,asks,both,notAsk};});
+  h+=`<div class="card" style="margin-top:16px"><header><h3>¿Coinciden los aspectos por fortalecer con los temas pedidos?</h3><p class="sub">Compara la valoración de cada criterio con los temas que cada municipio pidió trabajar primero</p></header><div class="tablewrap"><table class="cross"><thead><tr><th>Criterio</th><th>Tema relacionado en la boleta</th><th>En amarillo o rojo</th><th>Pidieron el tema</th><th>En amarillo o rojo <u>y</u> pidieron el tema</th><th>En rojo sin pedir el tema</th></tr></thead><tbody>${rows.map(x=>`<tr><td><b style="color:${GK[x.c.g].c}">${x.c.n}.</b> ${esc(x.c.s)}</td><td class="note">${esc(x.c.tema.map(t=>L.temas[t]).join(' / '))}</td><td class="n">${x.weak.length}</td><td class="n">${x.asks.length}</td><td><b>${x.both.length}</b> <span class="note">${names(x.both)}</span></td><td><b>${x.notAsk.length}</b> <span class="note">${names(x.notAsk)}</span></td></tr>`).join('')}</tbody></table></div><p class="note" style="margin-top:10px">Base: ${N} municipios. «Pidieron el tema» incluye a todos los que lo marcaron, sin importar su valoración.</p></div>`;
+  /* Orientaciones */
   const out=[];
-  const vc={verde:0,amarillo:0,rojo:0,sin_informacion:0};let tot=0;
-  for(const r of sel)for(const [k] of CRIT)if(vc[r[k]]!=null){vc[r[k]]++;tot++;}
-  const vbar=`<div class="vstack" role="img" aria-label="Verde ${vc.verde}, amarillo ${vc.amarillo}, rojo ${vc.rojo}, sin información ${vc.sin_informacion}">${['verde','amarillo','rojo','sin_informacion'].map(k=>vc[k]?`<span style="flex:${vc[k]};background:var(${ST[k].c})"></span>`:'').join('')}</div>
-    <div class="vleg"><span><i class="dot" style="background:var(--v)"></i> <b>${pct(vc.verde,tot)}%</b> verde</span><span><i class="dot" style="background:var(--a)"></i> <b>${pct(vc.amarillo,tot)}%</b> amarillo</span><span><i class="dot" style="background:var(--r)"></i> <b>${pct(vc.rojo,tot)}%</b> rojo</span></div>`;
-  if(!f()){
-    const n=all.length;
-    out.push(kpi({t:'Cobertura',icon:ICON.cover,body:`<div class="k-row">${ring(n,11)}<div><div class="k-val" style="margin-top:0">${n}<small> / 11</small></div><div class="k-foot">${11-n?`${11-n} ${pl(11-n,'municipio pendiente','municipios pendientes')}`:'Todos respondieron'}</div></div></div>`}));
-    const b=band(dIdx);
-    out.push(kpi({t:'Índice de uso',icon:ICON.gauge,c:b.c,bg:'var(--track)',body:`<div class="k-val">${dIdx??'—'}<small> / 100</small></div><div class="k-foot">Promedio departamental · nivel <b>${b.l.toLowerCase()}</b></div>`}));
-    out.push(kpi({t:'Valoraciones',icon:ICON.light,c:'--a',bg:'var(--track)',body:`<div class="k-val">${tot}<small> valoraciones</small></div>${vbar}`}));
-    const upd=all.filter(r=>r.en_actualizacion==='si');
-    out.push(kpi({t:'Actualizando el plan',icon:ICON.refresh,body:`<div class="k-val">${upd.length}<small> de ${n}</small></div><div class="k-foot">${upd.length?esc(upd.map(r=>mname(r.municipio)).join(', ')):'Ningún municipio lo reporta'}</div>`}));
-    const nr=all.filter(noRegistry);
-    out.push(kpi({t:'Sin registro de metas',icon:ICON.list,c:'--r',bg:'var(--track)',body:`<div class="k-val">${nr.length}<small> de ${n}</small></div><div class="k-foot">${nr.length?esc(nr.map(r=>mname(r.municipio)).join(', ')):'Todos tienen algún registro'}</div>`}));
-    const ages=all.map(age).filter(a=>a!=null),avg=ages.length?(ages.reduce((a,b)=>a+b,0)/ages.length):null,old=ages.filter(a=>a>=5).length;
-    out.push(kpi({t:'Antigüedad del plan',icon:ICON.clock,c:'--accent',bg:'var(--accent-soft)',body:`<div class="k-val">${avg==null?'—':avg.toLocaleString('es-GT',{maximumFractionDigits:1})}<small> años</small></div><div class="k-foot">Promedio de ${ages.length} ${pl(ages.length,'plan','planes')} con año conocido · ${old} con 5 años o más</div>`}));
-  }else{
-    const m=mname(S.filter);
-    if(!rec){out.push(kpi({t:'Estado de respuesta',icon:ICON.cover,c:'--s',bg:'var(--track)',body:`<div class="k-val" style="font-size:26px">Sin respuesta</div><div class="k-foot">${esc(m)} aún no ha enviado el diagnóstico.</div>`}));}
-    else{
-      const sc=scores.get(rec.municipio),b=band(sc.idx);
-      out.push(kpi({t:'Estado de respuesta',icon:ICON.cover,c:'--v',bg:'var(--track)',body:`<div class="k-val" style="font-size:26px">Respondió</div><div class="k-foot">${esc(m)} · ${fmtDate(rec._submission_time||rec.fecha)}</div>`}));
-      out.push(kpi({t:'Índice de uso',icon:ICON.gauge,c:b.c,bg:'var(--track)',body:`<div class="k-val">${sc.idx??'—'}<small> / 100</small></div><div class="k-foot">Promedio departamental: <b>${dIdx??'—'}</b>${sc.sin?` · ${sc.sin} ${pl(sc.sin,'criterio','criterios')} sin información`:''}</div>`}));
-      out.push(kpi({t:'Valoraciones',icon:ICON.light,c:'--a',bg:'var(--track)',body:`<div class="k-val">${tot}<small> criterios</small></div>${vbar}`}));
-      out.push(kpi({t:'Actualizando el plan',icon:ICON.refresh,body:`<div class="k-val" style="font-size:30px">${esc(lblFull('si_no_ns',rec.en_actualizacion)||'—')}</div><div class="k-foot">¿Están actualizando el PDM-OT?</div>`}));
-      out.push(kpi({t:'Registro de metas',icon:ICON.list,c:noRegistry(rec)?'--r':'--brand',bg:'var(--track)',body:`<div class="k-val" style="font-size:24px">${noRegistry(rec)?'Sin registro':esc((rec.medios_metas||[]).map(k=>lbl('medios_registro',k)).join(', ')||'—')}</div><div class="k-foot">Revisión: ${esc(lblFull('frecuencia',rec.frecuencia_revision)||'—')}</div>`}));
-      const a=age(rec);
-      out.push(kpi({t:'Antigüedad del plan',icon:ICON.clock,c:'--accent',bg:'var(--accent-soft)',body:`<div class="k-val">${a==null?'—':a}<small> ${a==null?'':pl(a,'año','años')}</small></div><div class="k-foot">${rec.anio_aprobacion?`Aprobado en ${rec.anio_aprobacion}${a>=5?' · posible actualización':''}`:'Año de aprobación no conocido'}</div>`}));
-    }
-  }
-  $('sec-kpi').innerHTML=out.join('');
-  function f(){return !!S.filter;}
-}
-function renderMap(all,scores,dIdx){
-  const resp=new Set(all.map(r=>r.municipio));
-  const missing=MUNIS.filter(k=>!resp.has(k));
-  const bands={rojo:0,amarillo:0,verde:0,nr:0};
-  MUNIS.forEach(k=>bands[band(resp.has(k)?scores.get(k).idx:null).k]++);
-  const lowest=all.slice().filter(r=>scores.get(r.municipio).idx!=null).sort((a,b)=>scores.get(a.municipio).raw-scores.get(b.municipio).raw)[0];
-  const highest=all.slice().filter(r=>scores.get(r.municipio).idx!=null).sort((a,b)=>scores.get(b.municipio).raw-scores.get(a.municipio).raw)[0];
-  $('t-map').textContent=all.length?`${highest?mname(highest.municipio)+' encabeza el uso del PDM-OT':''}${lowest&&highest&&lowest!==highest?'; '+mname(lowest.municipio)+' es el más rezagado':''}`:'Índice de uso del PDM-OT por municipio';
-  $('s-map').textContent=all.length?`${all.length} de 11 municipios con respuesta · promedio departamental ${dIdx??'—'}`:'Sin respuestas cargadas';
-  $('bandList').innerHTML=[['verde','Alto (70–100)'],['amarillo','Medio (40–69)'],['rojo','Bajo (0–39)'],['nr','Sin respuesta']].map(([k,l])=>`<div class="bandrow"><i class="sw ${k==='nr'?'st-nr':'st-'+k}"></i>${l}<b>${bands[k]} ${pl(bands[k],'municipio','municipios')}</b></div>`).join('');
-  $('missingList').innerHTML=missing.length?missing.map(k=>`<button class="chip miss" data-muni="${k}">${esc(mname(k))}</button>`).join(''):'<span class="note">Todos los municipios respondieron.</span>';
-  if(S.geo&&window.echarts){renderGeo(all,scores);return;}
-  $('geoMap').hidden=true;$('tiles').hidden=false;
-  const cells=[];
-  for(let y=0;y<4;y++)for(let x=0;x<4;x++){
-    const k=Object.keys(TILE).find(m=>TILE[m][0]===x&&TILE[m][1]===y);
-    if(!k){cells.push('<div class="tile ghost" aria-hidden="true"></div>');continue;}
-    const sc=resp.has(k)?scores.get(k):null,b=band(sc?sc.idx:null),cls=b.k==='nr'?'st-nr':'st-'+b.k;
-    const selc=S.filter===k?' sel':(S.filter?' dim':'');
-    const tip=sc?`${mname(k)}: índice ${sc.idx??'—'} (${b.l})${sc.sin?`, ${sc.sin} sin información`:''}`:`${mname(k)}: sin respuesta`;
-    cells.push(`<button class="tile ${cls}${selc}" data-muni="${k}" title="${esc(tip)}" aria-label="${esc(tip)}" aria-pressed="${S.filter===k}"><span class="t-n">${esc(mname(k))}</span><span class="t-v">${sc&&sc.idx!=null?sc.idx:'—'}</span><span class="t-b">${sc?b.l+(sc.sin?` · ${sc.sin} s/i`:''):'Sin respuesta'}</span></button>`);
-  }
-  $('tiles').innerHTML=cells.join('');
-  $('mapNote').textContent='Mapa esquemático: cada casilla ocupa la posición aproximada del municipio. Con un archivo chiquimula.geojson en el repositorio se pueden mostrar los límites reales.';
-}
-function renderGeo(all,scores){
-  $('tiles').hidden=true;$('geoMap').hidden=false;$('mapNote').textContent='';
-  const resp=new Set(all.map(r=>r.municipio));
-  const data=MUNIS.map(k=>{const sc=resp.has(k)?scores.get(k):null,b=band(sc?sc.idx:null);
-    return {name:k,value:sc?sc.idx:null,sc,itemStyle:{areaColor:b.k==='nr'?cssv('--nr'):cssv(b.c),borderColor:S.filter===k?cssv('--ink'):cssv('--card'),borderWidth:S.filter===k?3:1.2,opacity:S.filter&&S.filter!==k?.45:1}};});
-  const c=ec('geoMap',{
-    tooltip:{trigger:'item',formatter:p=>{const d=p.data;if(!d)return mname(p.name);return d.sc?`<b>${esc(mname(p.name))}</b><br>Índice de uso: <b>${d.sc.idx??'—'}</b> (${band(d.sc.idx).l})${d.sc.sin?`<br>${d.sc.sin} criterios sin información`:''}`:`<b>${esc(mname(p.name))}</b><br>Sin respuesta`;}},
-    series:[{type:'map',map:'chiquimula',roam:false,selectedMode:false,nameProperty:'_code',aspectScale:1,layoutCenter:['50%','50%'],layoutSize:'96%',
-      label:{show:true,formatter:p=>`${mname(p.name)}\n${p.data&&p.data.sc&&p.data.sc.idx!=null?p.data.sc.idx:'—'}`,fontSize:11,fontWeight:700,color:'#14232E',textBorderColor:'rgba(255,255,255,.85)',textBorderWidth:2},
-      emphasis:{label:{show:true},itemStyle:{areaColor:cssv('--accent')}},data}]
-  });
-  if(c){c.off('click');c.on('click',p=>setFilter(S.filter===p.name?'':p.name));}
-}
-function renderMatrix(all,scores,dIdx){
-  const resp=new Set(all.map(r=>r.municipio));
-  const rows=all.slice().sort((a,b)=>(scores.get(b.municipio).raw??-1)-(scores.get(a.municipio).raw??-1));
-  const missing=MUNIS.filter(k=>!resp.has(k));
-  const weakest=CRIT.map(c=>({k:c[0],...critIndex(all,c[0])})).filter(x=>x.idx!=null).sort((a,b)=>a.raw-b.raw)[0];
-  const tc={verde:0,amarillo:0,rojo:0,sin_informacion:0};for(const r of all)for(const [k] of CRIT)if(tc[r[k]]!=null)tc[r[k]]++;
-  const dom=['amarillo','rojo','verde'].sort((a,b)=>tc[b]-tc[a])[0],domTxt={verde:'adecuadas',amarillo:'parciales',rojo:'pendientes'}[dom];
-  $('t-matrix').textContent=all.length?`${rows.length} ${pl(rows.length,'municipio valorado','municipios valorados')}: predominan las valoraciones ${domTxt} (${tc[dom]} de ${Object.values(tc).reduce((a,b)=>a+b,0)})${weakest?` y ${CRIT_SHORT[weakest.k]} concentra los rezagos`:''}`:'Semáforo por municipio y criterio';
-  const cls=r=>S.filter?(S.filter===r?'sel':'dim'):'';
-  const head=`<thead><tr><th>Municipio</th>${CRIT.map(c=>`<th class="crit" title="${esc(c[2])}">${esc(c[1])}</th>`).join('')}<th class="idxcell">Índice de uso</th></tr></thead>`;
-  const body=rows.map(r=>{const sc=scores.get(r.municipio),b=band(sc.idx);
-    return `<tr class="${cls(r.municipio)}"><td><button class="mname" data-muni="${r.municipio}">${esc(mname(r.municipio))}</button></td>${CRIT.map(c=>{const v=r[c[0]],st=ST[v];
-      return st?`<td class="cell"><div class="cellbox st-${v}" title="${esc(mname(r.municipio)+' · '+c[1]+': '+st.l)}"><span aria-hidden="true">${st.i}</span>${st.l==='Sin información'?'Sin info':st.l}</div></td>`:`<td class="cell"><div class="cellbox st-nr" title="Sin dato">—</div></td>`;}).join('')}
-      <td class="idxcell"><div class="idxbar"><div class="tr"><div class="fl" style="width:${sc.idx||0}%;background:var(${b.c})"></div></div><b>${sc.idx??'—'}</b>${sc.sin?`<small>${sc.sin} s/i</small>`:''}</div></td></tr>`;}).join('')
-   +missing.map(k=>`<tr class="${cls(k)}"><td><button class="mname" data-muni="${k}" style="color:var(--muted)">${esc(mname(k))}</button></td>${CRIT.map(()=>`<td class="cell"><div class="cellbox st-nr"></div></td>`).join('')}<td class="idxcell"><span class="note" style="margin:0">Sin respuesta</span></td></tr>`).join('')
-   +(all.length?`<tr class="avg"><td>Promedio departamental</td>${CRIT.map(c=>{const ci=critIndex(all,c[0]),b=band(ci.idx);return `<td class="cell" style="text-align:center"><b style="color:var(--ink)">${ci.idx??'—'}</b> <i class="dot" style="background:var(${b.c})"></i></td>`;}).join('')}<td class="idxcell"><div class="idxbar"><div class="tr"><div class="fl" style="width:${dIdx||0}%;background:var(${band(dIdx).c})"></div></div><b>${dIdx??'—'}</b></div></td></tr>`:'');
-  $('matrix').innerHTML=`<table class="matrix">${head}<tbody>${body}</tbody></table>`;
-}
-function renderStack(sel){
-  if(!sel.length){$('t-stack').textContent='Valoraciones por criterio';return emptyChart('chStack','Sin respuestas para el filtro seleccionado.');}
-  const rows=CRIT.map(c=>({k:c[0],name:c[1],q:c[3],...critIndex(sel,c[0])})).sort((a,b)=>(a.raw??101)-(b.raw??101));
-  const n=sel.length,w=rows[0],s=rows.filter(r=>r.idx!=null).slice(-1)[0];
-  $('t-stack').textContent=w&&w.idx!=null?`${w.name} es el aspecto más rezagado${s&&s!==w?`; ${s.name}, el más sólido`:''}`:'Valoraciones por criterio';
-  const keys=['rojo','amarillo','verde','sin_informacion'];
-  ec('chStack',{
-    legend:{top:0,left:0,icon:'roundRect',itemWidth:12,itemHeight:12,textStyle:{color:cssv('--ink2'),fontSize:12.5},data:keys.map(k=>ST[k].l)},
-    grid:{left:8,right:16,top:34,bottom:8,containLabel:true},
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:ps=>{const r=rows[ps[0].dataIndex];return `<b>${esc(r.name)}</b><br><span style="color:var(--muted)">${esc(r.q)}</span><br>`+keys.map(k=>`${ST[k].i} ${ST[k].l}: <b>${r.c[k]}</b>`).join('<br>')+`<br>Índice del criterio: <b>${r.idx??'—'}</b>`;}},
-    xAxis:{type:'value',max:100,axisLabel:{formatter:'{value} %',color:cssv('--muted')},splitLine:{lineStyle:{color:cssv('--line')}}},
-    yAxis:{type:'category',inverse:true,data:rows.map(r=>r.name),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:cssv('--ink2'),fontSize:12.5,fontWeight:600}},
-    series:keys.map(k=>({name:ST[k].l,type:'bar',stack:'t',barWidth:20,itemStyle:{color:cssv(ST[k].c),borderColor:cssv('--card'),borderWidth:1.5},
-      label:{show:true,color:k==='amarillo'||k==='sin_informacion'?'#20303B':'#fff',fontSize:11.5,fontWeight:700,formatter:p=>{const c=rows[p.dataIndex].c[k];return p.value>=9?String(c):'';}},
-      data:rows.map(r=>n?+(r.c[k]/n*100).toFixed(1):0)}))
-  },Math.max(320,rows.length*36+60));
-}
-function renderRank(all,scores,dIdx){
-  const rows=all.filter(r=>scores.get(r.municipio).idx!=null).sort((a,b)=>scores.get(b.municipio).raw-scores.get(a.municipio).raw);
-  if(!rows.length){$('t-rank').textContent='Ranking del índice de uso';$('rankNote').textContent='';return emptyChart('chRank','Sin respuestas cargadas.');}
-  const above=rows.filter(r=>scores.get(r.municipio).idx>=dIdx).length;
-  $('t-rank').textContent=`${above} de ${rows.length} municipios igualan o superan el promedio departamental (${dIdx})`;
-  hbar('chRank',rows.map(r=>{const sc=scores.get(r.municipio),b=band(sc.idx);return {key:r.municipio,name:mname(r.municipio),value:sc.idx,color:cssv(b.c),dim:S.filter&&S.filter!==r.municipio,tip:`Índice ${sc.idx} (${b.l}) · ${sc.valid} criterios valorados${sc.sin?` · ${sc.sin} sin información`:''}`};}),{max:100,unit:'idx',markAvg:dIdx,right:30,onClick:it=>setFilter(S.filter===it.key?'':it.key)});
-  const sinInfo=rows.filter(r=>scores.get(r.municipio).sin>=3).map(r=>`${mname(r.municipio)} (${scores.get(r.municipio).sin} sin información)`);
-  $('rankNote').textContent=sinInfo.length?`Lectura con cautela: ${sinInfo.join(', ')}.`:'';
-}
-function renderPlan(all,sel){
-  // Año de aprobación
-  const withY=all.filter(r=>r.anio_aprobacion).sort((a,b)=>a.anio_aprobacion-b.anio_aprobacion);
-  const noY=all.filter(r=>!r.anio_aprobacion);
-  if(!withY.length){emptyChart('chYear','Ningún municipio reporta el año de aprobación.');$('t-year').textContent='Año de aprobación del PDM-OT';}
-  else{
-    const old=withY.filter(r=>age(r)>=5).length,minY=Math.min(withY[0].anio_aprobacion,CUR_YEAR-8)-1,narrow=($('chYear').clientWidth||400)<480,step=narrow?3:2;
-    $('t-year').textContent=`${old} de ${withY.length} planes con año conocido tienen 5 años o más`;
-    const c=ec('chYear',{
-      grid:{left:8,right:narrow?56:130,top:26,bottom:28,containLabel:true},
-      tooltip:{trigger:'item',formatter:p=>{const r=withY[p.dataIndex];return `<b>${esc(mname(r.municipio))}</b><br>Aprobado en ${r.anio_aprobacion} · ${age(r)} ${pl(age(r),'año','años')}${age(r)>=5?'<br>Posible actualización':''}<br>¿Actualizando? ${esc(lblFull('si_no_ns',r.en_actualizacion)||'—')}`;}},
-      xAxis:{type:'value',min:minY,max:CUR_YEAR,interval:1,axisLabel:{color:cssv('--muted'),formatter:v=>(CUR_YEAR-v)%step===0?String(v):''},splitLine:{lineStyle:{color:cssv('--line')}}},
-      yAxis:{type:'category',inverse:true,data:withY.map(r=>mname(r.municipio)),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:cssv('--ink2'),fontSize:12.5}},
-      series:[{type:'scatter',symbolSize:18,data:withY.map(r=>({value:[r.anio_aprobacion,mname(r.municipio)],itemStyle:{color:age(r)>=5?cssv('--accent'):cssv('--brand'),borderColor:cssv('--card'),borderWidth:2,opacity:S.filter&&S.filter!==r.municipio?.35:1}})),
-        label:{show:true,position:'right',distance:8,fontSize:12,fontWeight:700,color:cssv('--ink'),formatter:p=>{const r=withY[p.dataIndex];return narrow?`${age(r)} ${pl(age(r),'año','años')}${r.en_actualizacion==='si'?' ↻':''}`:`${r.anio_aprobacion} · ${age(r)} ${pl(age(r),'año','años')}${r.en_actualizacion==='si'?' · actualizando':''}`;}},
-        markArea:{silent:true,itemStyle:{color:cssv('--accent'),opacity:.10},label:{show:true,position:'top',color:cssv('--accent'),fontWeight:700,fontSize:11.5,formatter:'≥ 5 años'},data:[[{xAxis:minY},{xAxis:CUR_YEAR-5+.5}]]}}]
-    },Math.max(220,withY.length*40+70));
-    if(c){c.off('click');c.on('click',p=>{const r=withY[p.dataIndex];setFilter(S.filter===r.municipio?'':r.municipio);});}
-  }
-  $('yearNote').textContent=(noY.length?`Sin año de aprobación conocido: ${noY.map(r=>mname(r.municipio)).join(', ')}. `:'')+(withY.some(r=>r.en_actualizacion==='si')&&($('chYear').clientWidth||400)<480?'↻ = actualizando el plan.':'');
-  // ¿Actualizando?
-  const cu=counts(sel,'en_actualizacion'),si=cu.si||0;
-  $('t-upd').textContent=sel.length?(S.filter?(sel[0].en_actualizacion==='si'?'Sí está actualizando su PDM-OT':'No reporta actualización en curso'):`${si} de ${sel.length} ${pl(sel.length,'municipio está','municipios están')} actualizando su plan`):'¿Lo están actualizando?';
-  donut('chUpd',[{name:'Sí',value:si,color:cssv('--brand')},{name:'No',value:cu.no||0,color:cssv('--brand2')},{name:'No sabe',value:cu.no_sabe||0,color:cssv('--s')}],String(si),'actualizando',260);
-  // Oficinas
-  const keys=['ugam','dmm','gird','omdel','omsan'];
-  const resp=new Set(all.map(r=>r.municipio));
-  const answered=all.filter(r=>(r.oficinas_existentes||[]).length&&!r.oficinas_existentes.includes('no_sabe'));
-  const cnt=k=>answered.filter(r=>r.oficinas_existentes.includes(k)).length;
-  const least=keys.slice().sort((a,b)=>cnt(a)-cnt(b))[0];
-  $('t-off').textContent=answered.length?`${SHORT.oficinas[least]} es la oficina menos presente (${cnt(least)} de ${answered.length})`:'Oficinas municipales existentes';
-  const rowsO=MUNIS.filter(k=>resp.has(k)).map(k=>all.find(r=>r.municipio===k));
-  if(rowsO.length&&!S.seen.has('oficinas_existentes')){$('t-off').textContent='Oficinas municipales existentes';$('offices').innerHTML='<p class="empty">La base publicada desde Kobo no trae la pregunta de oficinas existentes. Revise que la GitHub Action incluya el campo <b>oficinas_existentes</b> en data.json.</p>';return;}
-  $('offices').innerHTML=rowsO.length?`<table class="offices"><thead><tr><th>Municipio</th>${keys.map(k=>`<th class="ck">${esc(SHORT.oficinas[k].split(' /')[0])}<div style="font-weight:600">${cnt(k)}/${answered.length}</div></th>`).join('')}</tr></thead><tbody>${rowsO.map(r=>{const v=r.oficinas_existentes||[];const dim=S.filter&&S.filter!==r.municipio?' style="opacity:.4"':'';
-    return `<tr${dim}><td><button class="mname" data-muni="${r.municipio}">${esc(mname(r.municipio))}</button></td>${keys.map(k=>`<td class="ck">${v.includes('no_sabe')?'<span class="no">¿?</span>':v.includes(k)?'<span class="yes" aria-label="Existe">✓</span>':'<span class="no" aria-label="No existe">—</span>'}</td>`).join('')}</tr>`;}).join('')}</tbody></table>`:'<p class="empty">Sin respuestas cargadas.</p>';
-}
-function catItems(sel,key,list,o={}){
-  const c=counts(sel,key);let keys=Object.keys(SCHEMA[list]);
-  if(o.hideZero)keys=keys.filter(k=>c[k]);
-  if(o.exclude)keys=keys.filter(k=>!o.exclude.includes(k)||c[k]);
-  const items=keys.map(k=>({key:k,name:lbl(list,k),full:lblFull(list,k),value:c[k]||0,color:o.bad&&o.bad.includes(k)?cssv('--r'):undefined}));
-  if(o.sort!==false)items.sort((a,b)=>b.value-a.value);
-  return items;
-}
-function renderSeg(sel){
-  const n=sel.length,gap=sel.filter(gapOf).length;
-  $('gapTxt').innerHTML=n?`Brecha de seguimiento: <b style="color:var(--r)">${pct(gap,n)} %</b> (${gap} de ${n}) sin registro de metas o sin revisión periódica`:'Dónde se registran, qué contienen y cada cuánto se revisan';
-  const medios=catItems(sel,'medios_metas','medios_registro',{bad:['ninguno'],exclude:['otro','no_sabe','informes_actas','plataforma','excel']});
-  const nr=(counts(sel,'medios_metas').ninguno)||0;
-  $('t-medios').textContent=n?(nr?`${nr} de ${n} ${pl(n,'municipio no tiene','municipios no tienen')} registro de metas`:'Todos reportan algún medio de registro'):'Medios de registro de metas';
-  hbar('chMedios',medios,{total:n});
-  const withReg=sel.filter(r=>(r.medios_metas||[]).some(k=>!['ninguno','no_sabe'].includes(k)));
-  const cont=catItems(withReg,'contenido_metas','contenido_registro',{sort:false,exclude:['ninguno','no_sabe']});
-  const missingC=cont.filter(i=>i.value===0).map(i=>i.name.toLowerCase());
-  $('t-cont').textContent=withReg.length?(missingC.length?`Ningún registro incluye ${missingC.slice(0,2).join(' ni ')}`:`Los ${withReg.length} registros cubren todos los elementos`):'Contenido del registro';
-  hbar('chCont',cont,{total:withReg.length,empty:'Ningún municipio reporta un registro de metas.'});
-  const freq=catItems(sel,'frecuencia_revision','frecuencia',{sort:false,bad:['no_revisan','sin_periodicidad'],exclude:['trimestral','semestral','anual','no_sabe']});
-  const fbad=sel.filter(r=>['no_revisan','sin_periodicidad'].includes(r.frecuencia_revision)).length;
-  $('t-freq').textContent=n?`${fbad} de ${n} no revisan avances o no tienen periodicidad`:'Frecuencia de revisión';
-  hbar('chFreq',freq,{total:n});
-}
-function renderDemand(sel){
-  const n=sel.length;
-  const temas=catItems(sel,'temas_prioritarios','temas',{hideZero:true});
-  const tTie=temas[1]&&temas[1].value===temas[0].value;
-  $('t-temas').textContent=temas.length?(tTie?`Temas más pedidos: ${temas[0].name} y ${lc(temas[1].name)} (${temas[0].value} de ${n} cada uno)`:`${temas[0].name} es el tema más pedido (${temas[0].value} de ${n})`):'Temas prioritarios';
-  hbar('chTemas',temas,{total:n});
-  const apoyos=catItems(sel,'apoyos_requeridos','apoyos',{hideZero:true});
-  const aTie=apoyos[1]&&apoyos[1].value===apoyos[0].value;
-  $('t-apoyos').textContent=apoyos.length?(aTie?`${apoyos[0].name} y ${lc(apoyos[1].name)}: los apoyos más pedidos (${apoyos[0].value} de ${n} cada uno)`:`${apoyos[0].value} de ${n} piden ${lc(apoyos[0].full)}`):'Apoyos requeridos';
-  hbar('chApoyos',apoyos,{total:n});
-  const cols=[cssv('--c1'),cssv('--c2'),cssv('--c3'),cssv('--c4'),cssv('--c5')];
-  const nec=Object.keys(SCHEMA.necesidad_principal).map((k,i)=>({key:k,name:SHORT.necesidad_principal[k],full:SCHEMA.necesidad_principal[k],value:counts(sel,'necesidad')[k]||0,color:cols[i]}));
-  const topN=nec.slice().sort((a,b)=>b.value-a.value)[0];
-  const change=sel.filter(r=>['actualizacion_parcial','revision_integral'].includes(r.necesidad)).length;
-  $('t-nec').textContent=n?(S.filter?`Necesidad: ${lc(topN.full)}`:`${topN.full} es la necesidad más común (${topN.value} de ${n}); ${change} ${pl(change,'pide','piden')} actualizar o revisar el plan`):'Necesidad principal';
-  donut('chNec',nec,String(n),pl(n,'municipio','municipios'),340);
-  const mod=catItems(sel,'modalidad','modalidades',{hideZero:true});
-  $('t-mod').textContent=mod.length?`${mod[0].name}: la modalidad preferida (${mod[0].value} de ${n})`:'Modalidad preferida';
-  hbar('chMod',mod,{total:n});
-  // Plazos
-  const lanes=['treinta_dias','uno_tres_meses','mas_tres_meses'],groups={};
-  for(const k of [...lanes,'por_definir'])groups[k]=sel.filter(r=>r.plazo_inicio===k);
-  const soon=groups.treinta_dias.length;
-  $('t-plazo').textContent=n?`${soon} ${pl(soon,'municipio podría','municipios podrían')} iniciar en los próximos 30 días`:'Plazo para iniciar';
-  const lname={treinta_dias:'30 días',uno_tres_meses:'1–3 meses',mas_tres_meses:'Más de 3 meses'};
-  $('lanes').innerHTML=lanes.map(k=>`<div class="lane"><h4>${lname[k]}</h4><div class="ln">${groups[k].length}</div><div class="chips">${groups[k].map(r=>`<button class="chip${k==='treinta_dias'?' acc':''}" data-muni="${r.municipio}">${esc(mname(r.municipio))}</button>`).join('')||'<span class="note">—</span>'}</div></div>`).join('');
-  $('laneExtra').innerHTML=groups.por_definir.length?`<p class="note">Por definir: ${groups.por_definir.map(r=>esc(mname(r.municipio))).join(', ')}</p>`:'';
-}
-function renderFindings(all,sel,rec,scores,dIdx){
-  const L=[];
-  const add=(icon,color,html)=>L.push(`<li><span class="fi" style="background:var(${color});color:${color==='--a'||color==='--s'?'#20303B':'#fff'}">${icon}</span><span>${html}</span></li>`);
-  if(!all.length){$('findings').innerHTML='<li><span>Cargue datos para generar la lectura automática.</span></li>';return;}
-  if(rec){
-    const sc=scores.get(rec.municipio),m=esc(mname(rec.municipio));
-    const diff=sc.idx!=null&&dIdx!=null?sc.idx-dIdx:null;
-    add('Σ','--brand',`<b>${m}</b> tiene un índice de uso de <b>${sc.idx??'—'}</b>, ${diff==null?'':diff===0?'igual al':`<b>${Math.abs(diff)} puntos ${diff>0?'por encima':'por debajo'}</b> del`} promedio departamental (${dIdx}).`);
-    const reds=CRIT.filter(c=>rec[c[0]]==='rojo').map(c=>c[1]);
-    if(reds.length)add('✕','--r',`Criterios en rojo: <b>${reds.join(', ')}</b>.`);
-    const greens=CRIT.filter(c=>rec[c[0]]==='verde').map(c=>c[1]);
-    if(greens.length)add('✓','--v',`Fortalezas (verde): <b>${greens.join(', ')}</b>.`);
-    if(sc.sin)add('?','--s',`${sc.sin} ${pl(sc.sin,'criterio quedó','criterios quedaron')} sin información; el índice se calcula sobre ${sc.valid}.`);
-    const ap=(rec.apoyos_requeridos||[]).map(k=>lblFull('apoyos',k));
-    if(ap.length)add('→','--accent',`Solicita: <b>${esc(ap.join('; '))}</b>${rec.plazo_inicio?`, con inicio en <b>${esc(lblFull('plazos',rec.plazo_inicio).toLowerCase())}</b>`:''}.`);
-  }else if(sel.length){
-    const n=sel.length;
-    const cr=CRIT.map(c=>({k:c[0],name:c[1],...critIndex(sel,c[0])})).filter(x=>x.idx!=null).sort((a,b)=>a.raw-b.raw);
-    if(cr.length){const w=cr[0];add('✕','--r',`El criterio más débil es <b>${w.name}</b>: ${w.c.rojo+w.c.amarillo} de ${n} municipios en rojo o amarillo (${w.c.rojo} en rojo)${w.c.sin_informacion?` y ${w.c.sin_informacion} sin información`:''}.`);
-      const s=cr[cr.length-1];if(s!==w)add('✓','--v',`El criterio más sólido es <b>${s.name}</b> (índice ${s.idx}): ${s.c.verde} de ${n} municipios lo valoran en verde.`);}
-    const ap=catItems(sel,'apoyos_requeridos','apoyos',{hideZero:true});
-    if(ap.length){const tie=ap[1]&&ap[1].value===ap[0].value;add('→','--accent',tie?`Los apoyos más pedidos son <b>${esc(lc(ap[0].full))}</b> y <b>${esc(lc(ap[1].full))}</b>: ${ap[0].value} municipios cada uno.`:`<b>${ap[0].value} ${pl(ap[0].value,'municipio pide','municipios piden')}</b> ${esc(lc(ap[0].full))}${ap[1]?`; le sigue ${esc(lc(ap[1].full))} (${ap[1].value})`:''}.`);}
-    const gap=sel.filter(gapOf).length;
-    add('!','--a',`<b>${gap} de ${n} municipios (${pct(gap,n)} %)</b> no tienen registro de metas o no revisan sus avances con periodicidad.`);
-    const ages=sel.filter(r=>r.anio_aprobacion),old=ages.filter(r=>age(r)>=5),upd=sel.filter(r=>r.en_actualizacion==='si');
-    if(ages.length)add('⏱','--brand',`<b>${old.length} de ${ages.length}</b> planes con año conocido tienen 5 años o más; <b>${upd.length}</b> ${pl(upd.length,'municipio reporta que ya lo está','municipios reportan que ya lo están')} actualizando${upd.length?` (${esc(upd.map(r=>mname(r.municipio)).join(', '))})`:''}.`);
-  }else{add('?','--s',`${esc(mname(S.filter))} aún no ha respondido el diagnóstico.`);}
-  $('findings').innerHTML=L.slice(0,5).join('');
-}
-function renderFicha(rec,scores,dIdx){
-  const sec=$('sec-ficha');
-  if(!S.filter){sec.hidden=true;return;}
-  sec.hidden=false;
-  const m=esc(mname(S.filter));
-  if(!rec){$('ficha').innerHTML=`<div class="ficha-top"><h3>${m}</h3></div><p class="empty">Este municipio aún no tiene una respuesta disponible.</p>`;return;}
-  const sc=scores.get(rec.municipio),b=band(sc.idx);
-  const chips=(arr,list)=>arr&&arr.length?`<div class="chips">${arr.map(k=>`<span class="chip">${esc(lblFull(list,k))}</span>`).join('')}</div>`:'—';
-  $('ficha').innerHTML=`
-   <div class="ficha-top"><div><h3>${m}</h3><p class="sub">${esc(rec.cargo||'Cargo no indicado')} · enviado ${fmtDate(rec._submission_time||rec.fecha,true)}</p></div>
-    <div class="cmp" aria-label="Índice comparado con el promedio">
-      <div class="row"><span>${m}</span><div class="tr"><div class="fl" style="width:${sc.idx||0}%;background:var(${b.c})"></div></div><b>${sc.idx??'—'}</b></div>
-      <div class="row"><span>Promedio depto.</span><div class="tr"><div class="fl" style="width:${dIdx||0}%;background:var(--brand2)"></div></div><b>${dIdx??'—'}</b></div>
-    </div></div>
-   <div class="semcards">${CRIT.map(c=>{const v=rec[c[0]],st=ST[v];return `<div class="semcard ${st?'st-'+v:'st-nr'}"><div class="sc-h"><span>${esc(c[1])}</span><span>${st?st.i+' '+st.l:'—'}</span></div><div class="sc-q">${esc(c[2])}</div></div>`;}).join('')}</div>
-   <dl class="facts">
-    <div class="fact"><dt>Plan vigente</dt><dd>${rec.anio_aprobacion?`Aprobado en <b>${rec.anio_aprobacion}</b> (${age(rec)} ${pl(age(rec),'año','años')})`:'Año de aprobación no conocido'} · ¿Actualizando? <b>${esc(lblFull('si_no_ns',rec.en_actualizacion)||'—')}</b></dd></div>
-    <div class="fact"><dt>Oficinas existentes</dt><dd>${S.seen.has('oficinas_existentes')?chips((rec.oficinas_existentes||[]),'oficinas'):'<span class="reserved">No viene en la base publicada</span>'}</dd></div>
-    <div class="fact"><dt>Registro y revisión de metas</dt><dd>${chips(rec.medios_metas,'medios_registro')}<div class="note">Revisión: ${esc(lblFull('frecuencia',rec.frecuencia_revision)||'—')}${rec.ejemplo_registro?` · Ejemplo: ${esc(rec.ejemplo_registro)}`:''}</div></dd></div>
-    <div class="fact"><dt>Necesidad principal</dt><dd><b>${esc(lblFull('necesidad_principal',rec.necesidad)||'—')}</b></dd></div>
-    <div class="fact"><dt>Temas prioritarios</dt><dd>${chips(rec.temas_prioritarios,'temas')}${rec.otro_tema?`<div class="note">Otro: ${esc(rec.otro_tema)}</div>`:''}</dd></div>
-    <div class="fact"><dt>Apoyos requeridos</dt><dd>${chips(rec.apoyos_requeridos,'apoyos')}${rec.otro_apoyo?`<div class="note">Otro: ${esc(rec.otro_apoyo)}</div>`:''}</dd></div>
-    <div class="fact"><dt>Modalidad y plazo</dt><dd><b>${esc(lblFull('modalidades',rec.modalidad)||'—')}</b> · ${esc(lblFull('plazos',rec.plazo_inicio)||'—')}</dd></div>
-    <div class="fact"><dt>Acción prioritaria</dt><dd>${reservedVal(rec,'accion_prioritaria')}</dd></div>
-    <div class="fact"><dt>Responsable propuesto</dt><dd>${reservedVal(rec,'responsable_propuesto')}</dd></div>
-    <div class="fact"><dt>Observaciones</dt><dd>${reservedVal(rec,'observaciones')}</dd></div>
-    ${S.publicMode?'':`<div class="fact"><dt>Informante</dt><dd>${esc(rec.informante||'—')}</dd></div>`}
-   </dl>`;
-}
-function tableCols(scores){
-  const cols=[
-    {k:'municipio',l:'Municipio',v:r=>mname(r.municipio)},
-    {k:'enviado',l:'Enviado',v:r=>r._t,f:r=>fmtDate(r._t)},
-    {k:'cargo',l:'Cargo',v:r=>r.cargo||''},
-    {k:'idx',l:'Índice',v:r=>scores.get(r.municipio).raw??-1,f:r=>{const sc=scores.get(r.municipio);return sc.idx==null?'—':String(sc.idx);}},
-    {k:'verde',l:'Verde',v:r=>scoreOf(r).c.verde},{k:'amarillo',l:'Amarillo',v:r=>scoreOf(r).c.amarillo},{k:'rojo',l:'Rojo',v:r=>scoreOf(r).c.rojo},{k:'sin',l:'Sin info',v:r=>scoreOf(r).c.sin_informacion},
-    {k:'anio',l:'Año plan',v:r=>r.anio_aprobacion||0,f:r=>r.anio_aprobacion||'—'},
-    {k:'upd',l:'¿Actualizando?',v:r=>lblFull('si_no_ns',r.en_actualizacion)||''},
-    {k:'medios',l:'Registro de metas',v:r=>(r.medios_metas||[]).map(k=>lbl('medios_registro',k)).join('; ')},
-    {k:'freq',l:'Revisión',v:r=>lblFull('frecuencia',r.frecuencia_revision)||''},
-    {k:'nec',l:'Necesidad principal',v:r=>lbl('necesidad_principal',r.necesidad)||''},
-    {k:'mod',l:'Modalidad',v:r=>lbl('modalidades',r.modalidad)||''},
-    {k:'plazo',l:'Plazo',v:r=>lblFull('plazos',r.plazo_inicio)||''}
-  ];
-  if(!S.publicMode)cols.push(
-    {k:'informante',l:'Informante',v:r=>r.informante||''},
-    {k:'accion',l:'Acción prioritaria',v:r=>r.accion_prioritaria||'',wrap:1},
-    {k:'resp',l:'Responsable propuesto',v:r=>r.responsable_propuesto||'',wrap:1},
-    {k:'obs',l:'Observaciones',v:r=>r.observaciones||'',wrap:1});
-  return cols;
-}
-let lastTable={cols:[],rows:[]};
-function renderTable(sel,scores){
-  const cols=tableCols(scores),q=norm(S.q);
-  let rows=sel.filter(r=>!q||norm(cols.map(c=>c.f?c.f(r):c.v(r)).join(' ')).includes(q));
-  const sc=cols.find(c=>c.k===S.sort.key)||cols[0];
-  rows.sort((a,b)=>{const x=sc.v(a),y=sc.v(b);const d=typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y),'es');return S.sort.dir==='asc'?d:-d;});
-  lastTable={cols,rows};
-  $('tableSub').textContent=S.publicMode?'Modo público: sin nombre del informante y con textos reservados ocultos':(S.source==='file'?'Carga local: se muestran todos los campos':'Tabla ordenable y buscable');
-  $('tableCount').textContent=`${rows.length} de ${sel.length} ${pl(sel.length,'respuesta','respuestas')} (una por municipio, la más reciente)`;
-  $('table').innerHTML=rows.length||sel.length?`<table class="data"><thead><tr>${cols.map(c=>`<th><button data-sort="${c.k}" data-dir="${S.sort.key===c.k?S.sort.dir:''}">${esc(c.l)}</button></th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${cols.map(c=>{const v=c.f?c.f(r):c.v(r);return c.k==='municipio'?`<td><button class="mname" data-muni="${r.municipio}">${esc(v)}</button></td>`:`<td class="${c.wrap?'wrap':''}">${esc(v===''?'—':v)}</td>`;}).join('')}</tr>`).join('')}</tbody></table>`:'<p class="empty">Sin respuestas cargadas.</p>';
-}
-function renderQuality(){
-  const L=[];
-  const srcName=S.source==='kobo'?'Base publicada de Kobo (data.json)':S.source==='file'?'Archivo local: '+S.fileName:S.source==='demo'?'Datos de demostración (ficticios)':'Sin datos';
-  L.push(`<li><b>Fuente:</b> ${esc(srcName)}${S.source==='kobo'&&S.updatedAt?` · actualizado ${esc(fmtDate(S.updatedAt,true))}`:''}.</li>`);
-  L.push(`<li><b>Registros reconocidos:</b> ${S.all.length}; municipios con respuesta: ${S.latest.length} de 11.</li>`);
-  L.push(`<li><b>Registros omitidos:</b> ${S.omitted} (municipio vacío o fuera del catálogo).</li>`);
-  L.push(S.dups.length?`<li><b>Respuestas duplicadas:</b> ${S.dups.map(d=>`${esc(mname(d.m))} (${d.n})`).join(', ')}. Se usa la más reciente según <i>_submission_time</i>.</li>`:'<li><b>Duplicados:</b> ninguno; cada municipio tiene una sola respuesta.</li>');
-  const sinInfo=S.latest.map(r=>({m:r.municipio,...scoreOf(r)})).filter(x=>x.sin||x.c.blank);
-  const totalSin=sinInfo.reduce((a,x)=>a+x.sin,0);
-  L.push(sinInfo.length?`<li><b>Criterios sin valoración:</b> ${totalSin} «sin información»${sinInfo.some(x=>x.c.blank)?' y algunos vacíos o no reconocidos':''} — ${sinInfo.map(x=>`${esc(mname(x.m))}: ${x.sin+x.c.blank}`).join(', ')}. Se excluyen del índice.</li>`:'<li><b>Criterios sin valoración:</b> ninguno.</li>');
-  {const imp={anio_aprobacion:'Año de aprobación',en_actualizacion:'¿Están actualizando?',oficinas_existentes:'Oficinas existentes',medios_metas:'Medios de registro',contenido_metas:'Contenido del registro',frecuencia_revision:'Frecuencia de revisión',necesidad:'Necesidad principal',temas_prioritarios:'Temas prioritarios',apoyos_requeridos:'Apoyos requeridos',modalidad:'Modalidad',plazo_inicio:'Plazo'};
-   const miss=Object.keys(imp).filter(k=>!S.seen.has(k));if(S.all.length&&miss.length)L.push(`<li><b>Preguntas que no vienen en la base:</b> ${miss.map(k=>imp[k]).join(', ')}. Sus gráficos aparecen vacíos; revise que la exportación o la GitHub Action incluya esos campos.</li>`);}
-  if(S.missing.length&&S.all.length)L.push(`<li><b>Columnas del semáforo no encontradas:</b> ${S.missing.map(k=>CRIT_SHORT[k]).join(', ')}.</li>`);
-  const invalid=[];for(const r of S.latest)for(const [f,list] of Object.entries(FIELD_LIST)){const vals=Array.isArray(r[f])?r[f]:(r[f]?[r[f]]:[]);for(const v of vals)if(!SCHEMA[list][v])invalid.push(`${mname(r.municipio)} · ${f}: «${v}»`);}
-  if(invalid.length)L.push(`<li><b>Valores no reconocidos:</b> ${esc(invalid.slice(0,8).join('; '))}${invalid.length>8?'…':''}</li>`);
-  if(S.publicMode)L.push('<li><b>Privacidad:</b> en la vista pública no se muestra el nombre de quien responde; acción prioritaria, responsable propuesto y observaciones aparecen como «Dato reservado».</li>');
-  $('quality').innerHTML=L.join('');
+  const topA=sortE(ap)[0],topT=sortE(te)[0];
+  for(const x of rows){if(x.both.length>=3)out.push(`<b>${esc(x.c.s)}:</b> ${x.both.length} municipios lo valoran como parcial o pendiente y además lo pidieron como tema (${names(x.both)}).`);}
+  for(const x of rows){if(x.notAsk.length>=2)out.push(`<b>${esc(x.c.s)}:</b> ${x.notAsk.length} municipios lo valoran en rojo y no lo marcaron como tema prioritario (${names(x.notAsk)}).`);}
+  const tie=sortE(ap).filter(e=>e[1].length===topA[1].length);
+  out.push(`<b>Tipo de apoyo:</b> ${esc(listY(tie.map(e=>lc(L.apoyos[e[0]]))))} ${tie.length>1?'son los más pedidos':'es el más pedido'} (${topA[1].length} de ${N}${tie.length>1?' cada uno':''}). ${(mo.presencial||[]).length} de ${N} prefieren modalidad presencial.`);
+  const sinM=RESP.filter(m=>CRIT.filter(c=>R[m][c.k]==='sin_informacion').length>=3);
+  if(sinM.length)out.push(`<b>Información por completar:</b> ${names(sinM)} ${pl(sinM.length,'tiene','tienen')} 3 o más criterios sin información. `);
+  h+=`<div class="card orient" style="margin-top:16px"><span class="lt">${I.bulb}Para una futura hoja de ruta</span><h3 style="margin-bottom:4px">Resultados a considerar para una futura hoja de ruta</h3><p class="sub" style="margin-bottom:14px">Coincidencias contadas a partir de las respuestas de Kobo, para el análisis con SEGEPLAN y las DMP. No son decisiones ni compromisos.</p><ul>${out.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  return h;
 }
 
-/* =====================================================================
-   7. Interacción
-   ===================================================================== */
-function setFilter(k){S.filter=k||'';$('muni').value=S.filter;render();}
-for(const [k,v] of Object.entries(SCHEMA.municipios))$('muni').add(new Option(v,k));
-$('muni').onchange=e=>setFilter(e.target.value);
+/* =========================================================
+   7. D · ¿Cómo está mi municipio?
+   ========================================================= */
+function vMunicipio(){
+  let h=`<div class="hero"><div><h2>¿Cómo está mi municipio?</h2><p>Elija un municipio para ver su ficha: cómo valoró los 9 criterios, su situación en planificación, inversión y gestión del riesgo, y el apoyo que pidió.</p></div></div>`;
+  h+=`<div class="mpick">${ALPHA.map(m=>`<button class="tile ${S.m===m?'on':''}" data-m="${m}" aria-pressed="${S.m===m}"><b>${esc(MUN[m])}</b>${strip(m)}</button>`).join('')}</div>`;
+  if(!S.m)return h+`<p class="note" style="margin-top:14px">Cada franja muestra los 9 criterios de la boleta en orden (1 a 9). ${keys()}</p>`;
+  const m=S.m,r=R[m],i=ALPHA.indexOf(m),prev=ALPHA[(i+ALPHA.length-1)%ALPHA.length],next=ALPHA[(i+1)%ALPHA.length];
+  h+=`<div class="mbar"><div class="nav2"><button class="btn gh" data-m="${prev}">${I.prev}${esc(MUN[prev])}</button><button class="btn gh" data-m="${next}">${esc(MUN[next])}${I.next}</button></div><button class="btn" id="printBtn">${I.print}Imprimir ficha</button></div>`;
+  if(!r)return h+`<article class="sheet"><div class="sh-top"><div><div class="k">Ficha municipal</div><h3>${esc(MUN[m])}</h3></div></div><div class="sh-body"><p>Este municipio todavía no tiene respuesta en la boleta de Kobo.</p></div></article>`;
+  const c={verde:[],amarillo:[],rojo:[],sin_informacion:[]};for(const x of CRIT)c[r[x.k]].push(x);
+  const col=(s,t)=>`<div class="col4" style="--cc:${ST[s].c};--cs:var(--${s==='verde'?'v':s==='amarillo'?'a':s==='rojo'?'r':'s'}-s)"><h4>${t}<b>${c[s].length}</b></h4>${c[s].length?`<ul>${c[s].map(x=>`<li>${x.n}. ${esc(x.s)}<small>${esc(GK[x.g].n)}</small></li>`).join('')}</ul>`:'<p class="note" style="margin-top:8px">Ninguno</p>'}</div>`;
+  const tri=['uso_planificacion','uso_inversion','gestion_riesgo'].map(k=>{const x=CK[k],g=GK[x.g],t=asksTema(m,x);return `<div class="tt" style="--tc:${g.c}"><div class="h">${x.n}. ${esc(x.s)}</div><div class="q">${esc(x.q)}</div>${pill(r[k])}<div class="d">${esc(ST[r[k]].l==='Sin información'?'La DMP no tenía información para valorarlo.':lc(x.sig[r[k]])+'.')}</div><div class="d">${t?`<b>Pidió trabajar este tema</b> («${esc(x.tema.map(z=>L.temas[z]).join(' / '))}»)`:'No lo marcó como tema prioritario'}</div></div>`;}).join('');
+  const a=age(r),reg=hasReg(r),fl=flags(m),nota=(D.meta.notas_control||[]).find(n=>n.municipio===m);
+  const offs=Object.keys(L.oficinasC).map(k=>(r.oficinas||[]).includes(k)?`<span class="tg">${I.check}${L.oficinasC[k]}</span>`:`<span class="tg off">${I.dash}${L.oficinasC[k]}</span>`).join('');
+  h+=`<article class="sheet" id="ficha"><div class="sh-top"><div><div class="k">Ficha municipal · Diagnóstico rápido del PDM-OT</div><h3>${esc(MUN[m])}</h3><div style="font-size:13px;color:#B9CDE8">Departamento de Chiquimula</div></div><div class="meta">Diagnóstico del ${fmtD(r.fecha)}<br>Respondió: personal de la DMP<br><span style="color:#B9CDE8">Nombre y cargo no se publican</span></div></div><div class="sh-body">${nota?`<div class="ctrl">${I.info}<span><b>Nota de control:</b> ${esc(nota.texto)}</span></div>`:''}
+  <div class="summ"><b style="font-size:15px">Valoración de los 9 criterios</b>${bar(Object.fromEntries(SK.map(k=>[k,c[k].length])),9)}</div>
+  <div class="four">${col('verde','Fortalezas declaradas')}${col('amarillo','Aspectos parciales')}${col('rojo','Aspectos pendientes')}${col('sin_informacion','Sin información')}</div>
+  <div class="sh-sec"><h4><span class="sw" style="background:var(--t-plan)"></span>Planificación, inversión y gestión del riesgo</h4><div class="trio">${tri}</div></div>
+  <div class="sh-sec"><h4><span class="sw" style="background:var(--t-seg)"></span>Plan vigente, registro y seguimiento de metas</h4><dl class="facts">
+   <div class="fact"><dt>Año de aprobación</dt><dd>${r.anio_aprobacion?`${r.anio_aprobacion} · ${a} ${pl(a,'año','años')}`:`No conocido (respuesta: ${L.si_no_ns[r.conoce_anio]||'—'})`} · ¿Lo actualizan? <b>${L.si_no_ns[r.en_actualizacion]||'—'}</b></dd></div>
+   <div class="fact"><dt>Dónde registran las metas</dt><dd>${esc((r.medios_metas||[]).map(k=>L.medios[k]).join('; ')||'—')}${reg&&(r.contenido_metas||[]).length?`<div class="note">Contiene: ${esc(r.contenido_metas.map(k=>L.contenido[k]).join('; '))}</div>`:''}</dd></div>
+   <div class="fact"><dt>Revisión de avances</dt><dd>${esc(L.frecuencia[r.frecuencia_revision]||'—')}${r.ejemplo_registro||(r.textos_pendientes||[]).includes('ejemplo')?` <span class="note">· Ejemplo: ${txt(r,'ejemplo_registro','ejemplo')}</span>`:''}</dd></div>
+   <div class="fact"><dt>Oficinas en la municipalidad</dt><dd class="tags">${offs}</dd></div></dl></div>
+  <div class="sh-sec"><h4><span class="sw" style="background:var(--t-risk)"></span>Necesidades y apoyo solicitado</h4><dl class="facts">
+   <div class="fact"><dt>Necesidad principal</dt><dd><b>${esc(L.necesidad[r.necesidad]||'—')}</b></dd></div>
+   <div class="fact"><dt>Temas para trabajar primero</dt><dd class="tags">${(r.temas||[]).map(k=>`<span class="tg">${esc(L.temas[k])}</span>`).join('')||'—'}</dd></div>
+   <div class="fact"><dt>Apoyo más útil</dt><dd class="tags">${(r.apoyos||[]).map(k=>`<span class="tg">${esc(L.apoyos[k])}</span>`).join('')||'—'}</dd></div>
+   <div class="fact"><dt>Modalidad y plazo</dt><dd>${esc(L.modalidad[r.modalidad]||'—')} · ${esc(L.plazo[r.plazo]||'—')}</dd></div>
+   </dl><div class="prop"><div class="lt">Propuesta declarada por la DMP · no es un compromiso acordado</div><dl class="facts"><div class="fact"><dt>Acción que propone iniciar</dt><dd><b>${txt(r,'accion_prioritaria','accion')}</b></dd></div><div class="fact"><dt>Oficina que podría coordinarla</dt><dd>${txt(r,'coordina','coordina')}</dd></div></dl>${r.texto_corregido?'<p class="note" style="margin-top:6px">Texto con corrección ortográfica mínima.</p>':''}</div></div>
+  ${fl.length?`<div class="sh-sec"><div class="vbox"><div class="lt">${I.q}Respuestas por confirmar con la DMP</div><ol class="vq">${fl.map(x=>`<li>${esc(x.t)} <b>¿Cómo deben leerse ambas respuestas?</b></li>`).join('')}</ol><p class="note" style="margin-top:8px">Las dos respuestas se conservan tal como se dieron. No se señala cuál es la correcta ni se consideran errores.</p></div></div>`:''}
+  <div class="sh-foot">${esc(D.meta.fuente)}. Valoraciones declaradas por la DMP en la boleta «Diagnóstico rápido del PDM-OT»; no son una evaluación ni una verificación institucional. Prototipo para revisión.</div></div></article>`;
+  return h;
+}
+
+/* =========================================================
+   8. Eventos
+   ========================================================= */
 document.addEventListener('click',e=>{
-  const m=e.target.closest('[data-muni]');if(m){setFilter(S.filter===m.dataset.muni?'':m.dataset.muni);return;}
-  const s=e.target.closest('[data-sort]');if(s){const k=s.dataset.sort;S.sort={key:k,dir:S.sort.key===k&&S.sort.dir==='desc'?'asc':'desc'};render();}
+  const t=e.target.closest('[data-view],[data-m],[data-crit],[data-anchor],#printBtn');if(!t)return;
+  if(t.id==='printBtn'){window.print();return;}
+  if(t.dataset.view){go(t.dataset.view,t.dataset.view==='municipio'?S.m:undefined);return;}
+  if(t.dataset.m){go('municipio',t.dataset.m);return;}
+  if(t.dataset.crit){go('mejorar',undefined,'c-'+t.dataset.crit);return;}
+  if(t.dataset.anchor){e.preventDefault();const el=$(t.dataset.anchor);if(el)el.scrollIntoView({block:'start'});}
 });
-$('q').addEventListener('input',e=>{S.q=e.target.value;const all=S.latest,sel=S.filter?all.filter(r=>r.municipio===S.filter):all;renderTable(sel,new Map(all.map(r=>[r.municipio,scoreOf(r)])));});
-$('fileLbl')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('file').click();}});
-let rz,lastW=window.innerWidth;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{Object.values(charts).forEach(c=>c&&!c.isDisposed()&&c.resize());if(Math.abs(window.innerWidth-lastW)>40&&S.latest.length){lastW=window.innerWidth;render();}},180);});
-window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>render());
-window.addEventListener('beforeprint',()=>Object.values(charts).forEach(c=>c&&!c.isDisposed()&&c.resize()));
-$('btnPrint').onclick=()=>window.print();
-if($('btnCsv'))$('btnCsv').onclick=()=>{
-  const {cols,rows}=lastTable;if(!rows.length){showError('No hay respuestas para exportar.');return;}
-  const cell=v=>{let s=String(v??'');if(/^[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
-  const csv='﻿'+[cols.map(c=>cell(c.l)).join(','),...rows.map(r=>cols.map(c=>cell(c.f?c.f(r):c.v(r))).join(','))].join('\r\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
-  a.download=`pdm-ot-chiquimula-${new Date().toISOString().slice(0,10)}${S.filter?'-'+S.filter:''}.csv`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
-};
-function showError(msg){const e=$('error');e.textContent=msg||'';e.classList.toggle('show',!!msg);}
+window.addEventListener('hashchange',()=>{parseHash();render();});
 
-/* =====================================================================
-   8. Carga de datos
-   ===================================================================== */
-function applyPublic(rs){for(const r of rs){delete r.informante;for(const k of RESERVED)r[k]=null;}return rs;}
-function setData(clean,o){
-  S.all=clean.out;S.latest=dedupe(S.all);S.omitted=o.omitted!=null?o.omitted:clean.omitted;S.missing=clean.missing;S.seen=new Set(clean.seen||[]);
-  S.source=o.source;S.publicMode=!!o.publicMode;S.updatedAt=o.updatedAt||'';S.fileName=o.fileName||'';
-  if(S.filter&&!SCHEMA.municipios[S.filter])S.filter='';
-  showError('');render();
-  setTimeout(()=>document.body.classList.add('ready'),700);
+/* =========================================================
+   9. Lectura de data.json
+   ========================================================= */
+const ORIGEN={url:'./data.json',refrescoMin:10};
+let ESTADO={tipo:'cargando',texto:'',actualizado:null,local:false};
+/* Traduce data.json (formato del script) al formato interno del visor.
+   Acepta también los nombres de campo anteriores, por compatibilidad. */
+function normalizar(json){
+  const recs=Array.isArray(json.records)?json.records:(Array.isArray(json.registros)?json.registros:null);
+  if(!recs)throw new Error('formato');
+  const meta=json.meta||{};
+  const porM={};
+  for(const x of recs){
+    if(!x||!MUN[x.municipio])continue;
+    const r={...x,
+      oficinas:x.oficinas||x.oficinas_existentes||[],temas:x.temas||x.temas_prioritarios||[],apoyos:x.apoyos||x.apoyos_requeridos||[],
+      plazo:x.plazo||x.plazo_inicio||'',enviado:x.enviado||x._submission_time||'',fecha:(x.fecha||'').slice(0,10),
+      medios_metas:x.medios_metas||[],contenido_metas:x.contenido_metas||[],textos_pendientes:x.textos_pendientes||[]};
+    if(!porM[r.municipio]||String(r.enviado)>String(porM[r.municipio].enviado))porM[r.municipio]=r; /* la más reciente */
+  }
+  const validos=recs.filter(x=>x&&MUN[x.municipio]).length;
+  const dup=meta.duplicados?meta.duplicados.reduce((a,d)=>a+(d.descartados||0),0):validos-Object.keys(porM).length;
+  return {updated_at:json.updated_at||meta.updated_at||null,registros:Object.values(porM),meta:{
+    fuente:meta.fuente||'KoboToolbox · Diagnóstico rápido del PDM-OT',
+    registros_recibidos:meta.recibidos??meta.registros_recibidos??recs.length,
+    registros_omitidos:json.omitted??meta.registros_omitidos??0,
+    duplicados_descartados:meta.duplicados_descartados??dup,
+    campos_excluidos:meta.campos_no_publicados||meta.campos_excluidos||['Nombre de quien responde','Cargo','Observaciones adicionales'],
+    textos_revisados:meta.textos_revisados||{fecha:null,criterio:''},
+    textos_pendientes:meta.textos_pendientes||[],
+    notas_control:meta.notas_control||[]}};
 }
-let loadSerial=0;
-async function loadPublished(force){
-  if(!force&&(S.source==='demo'||S.source==='file'))return;
-  const serial=++loadSerial,btn=$('btnRefresh'),span=btn.querySelector('span');
-  btn.disabled=true;span.textContent='Consultando…';
-  try{
-    const resp=await fetch('./data.json?t='+Date.now(),{cache:'no-store'});
-    if(!resp.ok)throw Error('No se pudo cargar la base publicada (data.json).');
-    const data=await resp.json();
-    if(!data||!Array.isArray(data.records))throw Error('La base publicada no tiene el formato esperado.');
-    if(serial!==loadSerial)return;
-    const clean=prepare(data.records);applyPublic(clean.out);
-    setData(clean,{source:'kobo',publicMode:true,updatedAt:data.updated_at,omitted:(Number(data.omitted)||0)+clean.omitted});
-  }catch(e){showError(e.message+' Si había datos, se conserva la vista anterior.');if(!S.source)render();}
-  finally{if(serial===loadSerial){btn.disabled=false;span.textContent='Actualizar vista';}}
+function aplicar(json,local){
+  D=normalizar(json);
+  R=Object.fromEntries(D.registros.map(r=>[r.municipio,r]));
+  RESP=ALPHA.filter(k=>R[k]);MISS=ALPHA.filter(k=>!R[k]);N=RESP.length;
+  ESTADO={tipo:N?'ok':'vacio',actualizado:D.updated_at,local:!!local};
+  $('fuente').textContent=D.meta.fuente+' · '+N+' '+pl(N,'municipio','municipios')+(D.updated_at?' · datos del '+fmtFH(D.updated_at):'');
 }
-$('btnRefresh').onclick=()=>{if(location.protocol.startsWith('http'))loadPublished(true);else showError('La actualización desde Kobo funciona cuando el visor está publicado en GitHub Pages.');};
-if($('file'))$('file').onchange=async e=>{
-  const f=e.target.files[0];if(!f)return;
-  try{
-    if(!window.XLSX)throw Error('No se pudo cargar la librería para leer Excel (revise la conexión a internet).');
-    const wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:true});
-    let best=null;
-    for(const name of wb.SheetNames){const raw=XLSX.utils.sheet_to_json(wb.Sheets[name],{defval:'',raw:true}),p=prepare(raw);const score=p.out.length?100+p.out.length+(9-p.missing.length)*10:0;if(!best||score>best.score)best={...p,score,sheet:name};}
-    if(!best||!best.out.length)throw Error('No se encontraron respuestas con municipios reconocidos. Cargue la exportación de respuestas de Kobo (nombres XML o etiquetas), no el XLSForm de diseño.');
-    if(best.missing.length===9)throw Error('El archivo no contiene las preguntas del semáforo. Revise que sea la exportación de respuestas de Kobo.');
-    loadSerial++;
-    setData(best,{source:'file',publicMode:false,fileName:f.name});
-  }catch(err){showError(err.message||'No fue posible leer el archivo.');}
-  finally{e.target.value='';}
-};
-if($('btnDemo'))$('btnDemo').onclick=()=>{
-  const sem=['verde','amarillo','rojo','sin_informacion'],nk=Object.keys(SCHEMA.necesidad_principal);
-  const raw=MUNIS.slice(0,9).map((m,i)=>{const r={municipio:m,fecha:'2026-10-08',_submission_time:`2026-10-08T1${i%10}:00:00`,informante:'Equipo municipal (ejemplo)',cargo:'Director DMP (ejemplo)',conoce_anio:i%4===3?'no_sabe':'si',anio_aprobacion:i%4===3?'':2016+i,en_actualizacion:i%3===0?'si':'no',necesidad:nk[i%5],
-    oficinas_existentes:['ugam dmm gird','ugam dmm omsan','ugam dmm gird omdel omsan','dmm gird'][i%4],medios_metas:i%3===0?'ninguno':'excel pei_pom_poa',contenido_metas:i%3===0?'':'indicador_base avance_fecha responsable',frecuencia_revision:['no_revisan','anual','semestral','sin_periodicidad'][i%4],
-    temas_prioritarios:[['datos metas'],['riesgo uso_suelo'],['vinculacion inversion'],['registro_seguimiento metas']][i%4][0],apoyos_requeridos:['taller asistencia','taller datos_mapas','formatos herramienta_metas','asistencia seguimiento'][i%4],modalidad:['presencial','combinada','virtual'][i%3],plazo_inicio:['treinta_dias','uno_tres_meses','mas_tres_meses'][i%3],
-    accion_prioritaria:'Definir una matriz de metas y revisar la vinculación con el POA (ejemplo).',responsable_propuesto:'DMP y equipo técnico (ejemplo)',observaciones:'Texto de ejemplo.'};
-    CRIT.forEach(([k],j)=>r[k]=sem[(i*3+j*2+(j>5?1:0))%4]);return r;});
-  loadSerial++;setData(prepare(raw),{source:'demo',publicMode:false});
-};
-
-/* GeoJSON opcional con los límites municipales.
-   Cuando suba chiquimula.geojson al repositorio, cambie MAPA_GEOJSON a './chiquimula.geojson'.
-   Mientras esté vacío se usa el mapa esquemático (así no aparece un error 404 en la consola). */
-const MAPA_GEOJSON='';
-async function loadGeo(){
-  if(!MAPA_GEOJSON||!location.protocol.startsWith('http')||!window.echarts)return;
-  try{
-    const r=await fetch(MAPA_GEOJSON,{cache:'no-cache'});if(!r.ok)return;
-    const g=await r.json();if(!g||!Array.isArray(g.features))return;
-    const feats=[];
-    for(const ft of g.features){const p=ft.properties||{};let code=null;
-      for(const v of Object.values(p)){if(typeof v!=='string')continue;const n=norm(v);for(const [k,l] of Object.entries(SCHEMA.municipios))if(n===norm(l)||n===norm(k)){code=k;break;}if(code)break;}
-      if(code){ft.properties={...p,_code:code};feats.push(ft);}}
-    if(feats.length<6)return;
-    echarts.registerMap('chiquimula',{type:'FeatureCollection',features:feats});S.geo=true;render();
-  }catch(e){/* sin GeoJSON: se usa el mapa esquemático */}
+const fmtFH=iso=>{try{return new Intl.DateTimeFormat('es-GT',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'America/Guatemala'}).format(new Date(iso));}catch(e){return iso;}};
+function pintarEstado(){
+  const e=$('estado');let h='';
+  if(ESTADO.tipo==='cargando')h=`<div class="est info">${I.cal}<span>Cargando los datos publicados…</span></div>`;
+  else if(ESTADO.tipo==='error')h=`<div class="est err">${I.info}<span><b>No se pudieron cargar los datos publicados.</b> ${esc(ESTADO.texto)}</span><button class="btn gh sm2" id="reintentar">Reintentar</button></div>`;
+  else if(ESTADO.tipo==='vacio')h=`<div class="est warn">${I.info}<span><b>Aún no hay respuestas publicadas.</b> Cuando las DMP envíen la boleta en Kobo, los resultados aparecerán aquí después de la siguiente sincronización.</span></div>`;
+  else h=`<div class="est ok">${I.check}<span>${ESTADO.local?'<b>Copia local para revisión.</b> ':''}Datos actualizados el ${esc(fmtFH(ESTADO.actualizado))} · ${N} de 11 municipios con respuesta${ESTADO.aviso?` · <b>${esc(ESTADO.aviso)}</b>`:''}</span>${ESTADO.local?'':'<button class="btn gh sm2" id="reintentar">Actualizar</button>'}</div>`;
+  e.innerHTML=h;
 }
-
-/* Inicio */
-render();
-if(location.protocol==='http:'||location.protocol==='https:'){loadPublished(true);loadGeo();setInterval(()=>loadPublished(false),300000);}
+async function cargar(silencioso){
+  if(window.PDMOT_DATOS_LOCALES){aplicar(window.PDMOT_DATOS_LOCALES,true);pintarEstado();render();return;}
+  if(!silencioso){ESTADO={tipo:'cargando'};pintarEstado();}
+  try{
+    if(location.protocol==='file:')throw new Error('local');
+    const resp=await fetch(ORIGEN.url+'?t='+Date.now(),{cache:'no-store'});
+    if(!resp.ok)throw new Error(resp.status===404?'noexiste':'http '+resp.status);
+    let json;try{json=await resp.json();}catch(e){throw new Error('formato');}
+    const antes=D&&D.updated_at;
+    aplicar(json,false);
+    if(silencioso&&antes&&antes!==D.updated_at)ESTADO.aviso='se actualizaron los resultados';
+  }catch(err){
+    if(D&&silencioso)return;                         /* conserva la vista anterior */
+    const msg=err.message==='local'?'El visor se abrió desde el equipo. Use la dirección de GitHub Pages o el archivo vista-local.html que genera la prueba.':err.message==='formato'?'El archivo de datos no tiene el formato esperado. Revise la última ejecución de GitHub Actions.':err.message==='noexiste'?'No se encontró el archivo de datos publicado (data.json). Revise la última ejecución de GitHub Actions.':'Revise la conexión a internet e intente de nuevo. Si el problema continúa, revise la última ejecución de GitHub Actions.';
+    ESTADO={tipo:'error',texto:msg};D=null;
+  }
+  pintarEstado();render();
+}
+document.addEventListener('click',e=>{if(e.target.closest('#reintentar'))cargar(false);});
+parseHash();cargar(false);
+setInterval(()=>{if(!ESTADO.local&&document.visibilityState==='visible')cargar(true);},ORIGEN.refrescoMin*60000);
 </script>
 </body>
 </html>
