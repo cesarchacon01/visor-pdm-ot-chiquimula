@@ -1,0 +1,70 @@
+name: Probar visor PDM-OT (sin publicar)
+
+# Prueba el visor y la sincronización en la rama de prueba SIN publicar en GitHub Pages.
+# - No tiene permisos de Pages ni usa deploy-pages: no puede reemplazar el visor público.
+# - Escribe los resultados en la carpeta prueba/ y los deja como artefacto descargable.
+on:
+  push:
+    branches: [new-branch]
+  workflow_dispatch:
+    inputs:
+      referencia:
+        description: 'Conteo esperado: municipios,verde,amarillo,rojo,sin_informacion (escriba "ninguna" para no comparar)'
+        required: false
+        default: '11,29,49,12,9'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prueba-new-branch
+  cancel-in-progress: true
+
+jobs:
+  probar:
+    if: github.ref == 'refs/heads/new-branch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Pruebas automáticas (sin conexión a Kobo)
+        run: python -m unittest discover -s tests -v
+
+      - name: Sincronizar con Kobo en la carpeta de prueba
+        env:
+          KOBO_TOKEN: ${{ secrets.KOBO_TOKEN }}
+          KOBO_SERVER: ${{ secrets.KOBO_SERVER }}
+          # Si existe KOBO_ASSET_UID_PRUEBA (copia del formulario para pruebas), se usa esa; si no, el formulario real (solo lectura).
+          KOBO_ASSET_UID: ${{ secrets.KOBO_ASSET_UID_PRUEBA || secrets.KOBO_ASSET_UID }}
+        run: python scripts/sincronizar_kobo.py --salida prueba/data.json
+
+      - name: Revisar datos generados
+        env:
+          REFERENCIA: ${{ github.event.inputs.referencia || '11,29,49,12,9' }}
+        run: |
+          if [ "$REFERENCIA" = "ninguna" ]; then
+            python tests/verificar_datos.py prueba/data.json
+          else
+            python tests/verificar_datos.py prueba/data.json --referencia "$REFERENCIA"
+          fi
+
+      - name: Armar copia del visor para revisar sin servidor
+        if: always()
+        run: |
+          if [ -f prueba/data.json ]; then
+            python scripts/empaquetar_local.py site/index.html prueba/data.json prueba/vista-local.html
+          fi
+
+      - name: Guardar resultados de la prueba
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visor-prueba
+          path: prueba/
+          if-no-files-found: warn
+          retention-days: 7
